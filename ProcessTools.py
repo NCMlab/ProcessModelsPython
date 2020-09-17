@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import norm
 
 # Make multivariate normal data. The inputs allow the means, variances and covariances to be adjusted
 # The size of the data is determined by the size of the mean and cov matrix inputs
@@ -17,17 +18,35 @@ data = MakeMultiVariableData(100,[1,1,1],[[1,0.4,0.0],[0.0,1,0.4],[0.4,0.4,1]])
 
 NBoot = 5000
 betalist,interlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+JKbetalist, JKinterlist = JackKnife(Calculate_Beta_Sklearn, data)
 plt.figure()
 plt.hist(betalist[:,0])
 plt.hist(betalist[:,1])
 
 sns.pairplot(pd.DataFrame(data))
-print(Calculate_Beta_Sklearn(data))
+PE = Calculate_Beta_Sklearn(data)
+print(PE)
 
-def JackKnife():
-    pass
 
-def CalculateBCaCI():
+
+def JackKnife(func, data):
+    N,M = data.shape
+    # prepare output arrays
+    betalist = np.zeros([N,M-1])
+    interlist = np.zeros([N,1])
+    temp = np.arange(N)
+    for i in range(0,N):
+        JKresample = data[np.delete(temp, i),:]
+        # randomly resample the dataset with the original set with replacement
+        tempP = func(JKresample)
+        betalist[i,:] = tempP[0]
+        interlist[i] = tempP[1]
+    return betalist,interlist
+
+def CalculateBCaCI(BS, JK, PE, alpha):
+    NBoot = BS.shape[0]
+    zh0 = norm.ppf(np.sum(BS < PE[0][0])/NBoot)
+    
     pass
 
 def MakeMultiVariableData(N = 1000, means = [1,1,1], covs = [[1,0,0],[0,1,0],[0,0,1]]):
