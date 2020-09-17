@@ -7,44 +7,52 @@ from sklearn import linear_model
 from sklearn.utils import resample
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-d = MakeThreeVariableData(100,[1,1,1],[[1,0.1,0.1],[0.1,1,0.1],[0.1,0.1,1]])
-Calculate_Beta_Sklearn(d[['X','Y']], d['Z'])
+# Make multivariate normal data. The inputs allow the means, variances and covariances to be adjusted
+# The size of the data is determined by the size of the mean and cov matrix inputs
+data = MakeMultiVariableData(100,[1,1,1],[[1,0.4,0.0],[0.0,1,0.4],[0.4,0.4,1]])
+# Assume that the last column is the data and the rest are predictors
 
-d = MakeThreeVariableData(100,[1,1,1],[[1,0.2,0.2],[0.2,1,0.2],[0.2,0.2,1]])
-Calculate_Beta_Sklearn(d[['X','Y']], d['Z'])
+NBoot = 5000
+betalist,interlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+plt.figure()
+plt.hist(betalist[:,0])
+plt.hist(betalist[:,1])
 
-NBoot = 200
+sns.pairplot(pd.DataFrame(data))
+print(Calculate_Beta_Sklearn(data))
 
+def JackKnife():
+    pass
 
-Resample_Sklearn(NBoot,Calculate_Beta_Sklearn,X,y)
+def CalculateBCaCI():
+    pass
 
+def MakeMultiVariableData(N = 1000, means = [1,1,1], covs = [[1,0,0],[0,1,0],[0,0,1]]):
+    x = np.random.multivariate_normal(means, covs, N)
+    return x
 
-def MakeThreeVariableData(N = 1000, means = [1,1,1], covs = [[1,0,0],[0,1,0],[0,0,1]]):
-    x, y, z = np.random.multivariate_normal(means, covs, N).T
-    df = pd.DataFrame({'X': x, 'Y': y, 'Z':z})
-    return df
-
-def Calculate_Beta_Sklearn(X,y):
+def Calculate_Beta_Sklearn(data):
     # using linear regression model from sklearn 
     lm = linear_model.LinearRegression()
     #fit the x,y to the model,x will be a 2d matrix and y is a array
-    model = lm.fit(X,y)
-    #default method to calculate the beta
-    beta = model.coef_
-    inter = model.intercept_
-    # print(beta)
-    return beta,inter
+    model = lm.fit(data[:,[0,-2]], data[:,-1])
+    return model.coef_, model.intercept_
 
-def Resample_Sklearn(NBoot,func, data):
-    N = data.shape[0]
-    M = data.shape[1] - 1
-    betalist = np.zeros([N,M])
-    interlist = np.zeros([N,1])
+def Bootstrap_Sklearn(NBoot, func, data):
+    # How big is the data
+    N,M = data.shape
+    # prepare output arrays
+    betalist = np.zeros([NBoot,M-1])
+    interlist = np.zeros([NBoot,1])
     for i in range(0,NBoot):
         # randomly resample the dataset with the original set with replacement
-        a = resample(X, N, replace=True, random_state=i)
-        betalist[i,:],interlist[i] = func(data[[]],data[])#<<<FIX THIS
+        a = resample(data, n_samples=N, replace=True, random_state=i)
+        temp = func(a)
+        betalist[i,:] = temp[0]
+        interlist[i] = temp[1]
     return betalist,interlist
 
 # def m1_bootstrap(m,age):
