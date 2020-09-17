@@ -13,22 +13,64 @@ from scipy.stats import norm
 
 # Make multivariate normal data. The inputs allow the means, variances and covariances to be adjusted
 # The size of the data is determined by the size of the mean and cov matrix inputs
-data = MakeMultiVariableData(100,[1,1,1],[[1,0.4,0.0],[0.0,1,0.4],[0.4,0.4,1]])
+
 # Assume that the last column is the data and the rest are predictors
 
-NBoot = 5000
-betalist,interlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
-JKbetalist, JKinterlist = JackKnife(Calculate_Beta_Sklearn, data)
 plt.figure()
 plt.hist(betalist[:,0])
 plt.hist(betalist[:,1])
 
 sns.pairplot(pd.DataFrame(data))
-PE = Calculate_Beta_Sklearn(data)
-print(PE)
 
+NSimMC = 100
 
+NBoot = 2000
+N = 100
+alpha = 0.05
 
+means = [1,1,1]
+Cov = 0.25
+covs = [[1,Cov,Cov],[Cov,1,Cov],[Cov,Cov,1]]
+data = MakeMultiVariableData(N,means, covs)
+PointEstimate = Calculate_Beta_Sklearn(data)
+BSbetalist,BSinterlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+JKbetalist, JKinterlist = JackKnife(Calculate_Beta_Sklearn, data)
+
+print(PointEstimate)
+index = 0
+print(CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha))
+index = 1
+print(CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha))
+
+np.corrcoef(data.T)
+
+MClist = CalculatePower(NSimMC, NBoot, N, alpha, means, covs)
+MClist.sum(0)/NSimMC
+
+def CalculatePower(NSimMC, NBoot, N, alpha, means, covs):
+    # How many predictor columns are there?
+    M = np.size(means) - 1 
+    # Prepare a matrix for counting significant findings
+    MClist = np.zeros((NSimMC,M))
+    # Repeatedly generate data for Monte Carlo simulations 
+    for i in range(NSimMC):
+        # Make data
+        data = MakeMultiVariableData(N,means, covs)
+        # Bootstrap Resample
+        BSbetalist,BSinterlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+        # Jackknife
+        JKbetalist, JKinterlist = JackKnife(Calculate_Beta_Sklearn, data)
+        # Calculate the point estimate
+        PointEstimate = Calculate_Beta_Sklearn(data)
+        # Calculate the confidence intervals
+        for index in range(M):
+            BCaCI = CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha)
+            if BCaCI[0]*BCaCI[1] > 0:
+                MClist[i, index] = 1
+        # Calculate the confidence intervals for the multiplication of the mediation effect
+
+    return MClist
+    
 def JackKnife(func, data):
     N,M = data.shape
     # prepare output arrays
@@ -45,10 +87,24 @@ def JackKnife(func, data):
 
 def CalculateBCaCI(BS, JK, PE, alpha):
     NBoot = BS.shape[0]
-    zh0 = norm.ppf(np.sum(BS < PE[0][0])/NBoot)
-    
-    pass
+    N = JK.shape[0]
+    zA = norm.ppf(alpha/2)
+    z1mA = norm.ppf(1 - alpha/2)
+    # Find resamples less than point estimate
+    F = np.sum(BS < PE)
+    BCaCI = [-1, 1]
+    if F > 0:
+        zh0 = norm.ppf(F/NBoot)
+        ThetaDiff = JK.sum()/N - JK
+        acc = ((ThetaDiff**3).sum())/(6*((ThetaDiff**2).sum())**(3/2))
+        Alpha1= norm.cdf(zh0 + (zh0 + zA)/(1 - acc*(zh0 + zA)))
+        Alpha2 = norm.cdf(zh0 + (zh0 + z1mA)/(1 - acc*(zh0 + z1mA)))
 
+        PCTlower = np.percentile(BS,Alpha1*100)
+        PCTupper = np.percentile(BS,Alpha2*100)
+        BCaCI = [PCTlower, PCTupper]
+    return BCaCI
+    
 def MakeMultiVariableData(N = 1000, means = [1,1,1], covs = [[1,0,0],[0,1,0],[0,0,1]]):
     x = np.random.multivariate_normal(means, covs, N)
     return x
