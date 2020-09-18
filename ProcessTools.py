@@ -37,9 +37,9 @@ plt.hist(betalist[:,1])
 
 sns.pairplot(pd.DataFrame(data))
 
-NSimMC = 100
-
+NSimMC = 1000
 NBoot = 2000
+
 N = 100
 alpha = 0.05
 
@@ -47,63 +47,103 @@ means = [1,1,1]
 Cov = 0.25
 covs = [[1,Cov,Cov],[Cov,1,Cov],[Cov,Cov,1]]
 data = MakeMultiVariableData(N,means, covs)
-
-
-# Model 1: A --> C, c
-PointEstimate1 = Calculate_Beta_Sklearn(data[:,[0,2]])
-# Model 2: A --> B, a
+np.corrcoef(data.T)
+# Point estimates
 PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
-# Model 3: A + B --> C, c', b 
 PointEstimate3 = Calculate_Beta_Sklearn(data)
-
-# Total effect
-TE = PointEstimate1[0][0]
-# Indirect effect
-IE = PointEstimate2[0][0]*PointEstimate3[0][1]
-# Direct effect
-DE = PointEstimate3[0][0]
+# Point estimate mediation effects
+IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
 
 # Bootstrap model 2
 BSbetalist2, BSinterlist2 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
 JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
 # Bootstrap model 3
-BSbetalist3,BSinterlist3 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+BSbetalist3, BSinterlist3 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
 JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+# Bootstrap mediation effects
+BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+# Jackknifemediation effects
+JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
 
 
-print(PointEstimate2)
-index = 0
-print(CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha))
-index = 1
-print(CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha))
+IECI = CalculateBCaCI(BSIE, JKIE, IE, alpha)
+TECI = CalculateBCaCI(BSTE, JKTE, TE, alpha)
+DECI = CalculateBCaCI(BSDE, JKDE, DE, alpha)
+aCI = CalculateBCaCI(BSa, JKa, a, alpha)
+bCI = CalculateBCaCI(BSb, JKb, b, alpha)
+print("a: %0.3f (%0.3f : %0.3f)"%(a,aCI[0],aCI[1]))
+print("b: %0.3f (%0.3f : %0.3f)"%(b,bCI[0],bCI[1]))
+print("TE: %0.3f (%0.3f : %0.3f)"%(TE,TECI[0],TECI[1]))
+print("DE: %0.3f (%0.3f : %0.3f)"%(DE,DECI[0],DECI[1]))
+print("IE: %0.3f (%0.3f : %0.3f)"%(IE,IECI[0],IECI[1]))
 
 np.corrcoef(data.T)
-
 MClist = CalculatePower(NSimMC, NBoot, N, alpha, means, covs)
 MClist.sum(0)/NSimMC
 
+
+
+
+def CalculateMediationPEEffect(PointEstimate2, PointEstimate3):
+    # Indirect effect
+    a = PointEstimate2[0][0]
+    b = PointEstimate3[0][1]
+    IE = a*b
+    # Direct effect
+    DE = PointEstimate3[0][0]
+    TE = DE + IE
+    return IE, TE, DE, a, b
+    
+def CalculateMediationResampleEffect(BSbetalist2, BSbetalist3):
+    # Indirect effect
+    a = np.squeeze(BSbetalist2)
+    b = np.squeeze(BSbetalist3[:,1])
+    IE = a*b
+    DE = np.squeeze(BSbetalist3[:,0])
+    TE = DE + IE
+    return IE, TE, DE, a, b
+    
 def CalculatePower(NSimMC, NBoot, N, alpha, means, covs):
-    # How many predictor columns are there?
-    M = np.size(means) - 1 
+
     # Prepare a matrix for counting significant findings
-    MClist = np.zeros((NSimMC,M))
+    MClist = np.zeros((NSimMC,5))
     # Repeatedly generate data for Monte Carlo simulations 
     for i in range(NSimMC):
+        print("%d of %d"%(i+1,NSimMC))
         # Make data
         data = MakeMultiVariableData(N,means, covs)
-        # Bootstrap Resample
-        BSbetalist,BSinterlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
-        # Jackknife
-        JKbetalist, JKinterlist = JackKnife(Calculate_Beta_Sklearn, data)
-        # Calculate the point estimate
-        PointEstimate = Calculate_Beta_Sklearn(data)
-        # Calculate the confidence intervals
-        for index in range(M):
-            BCaCI = CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha)
-            if BCaCI[0]*BCaCI[1] > 0:
-                MClist[i, index] = 1
-        # Calculate the confidence intervals for the multiplication of the mediation effect
-
+        # Point estimates
+        PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+        PointEstimate3 = Calculate_Beta_Sklearn(data)
+        # Point estimate mediation effects
+        IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+        
+        # Bootstrap model 2
+        BSbetalist2, BSinterlist2 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+        JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+        # Bootstrap model 3
+        BSbetalist3, BSinterlist3 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+        JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+        # Bootstrap mediation effects
+        BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+        # Jackknifemediation effects
+        JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+        
+        IECI = CalculateBCaCI(BSIE, JKIE, IE, alpha)
+        TECI = CalculateBCaCI(BSTE, JKTE, TE, alpha)
+        DECI = CalculateBCaCI(BSDE, JKDE, DE, alpha)
+        aCI = CalculateBCaCI(BSa, JKa, a, alpha)
+        bCI = CalculateBCaCI(BSb, JKb, b, alpha)
+        if IECI[0]*IECI[1] > 0:
+            MClist[i, 0] = 1        
+        if TECI[0]*TECI[1] > 0:
+            MClist[i, 1] = 1        
+        if DECI[0]*DECI[1] > 0:
+            MClist[i, 2] = 1        
+        if aCI[0]*aCI[1] > 0:
+            MClist[i, 3] = 1        
+        if bCI[0]*bCI[1] > 0:
+            MClist[i, 4] = 1        
     return MClist
     
 def JackKnife(func, data):
@@ -169,34 +209,3 @@ def Bootstrap_Sklearn(NBoot, func, data):
         interlist[i] = temp[1]
     return betalist,interlist
 
-# def m1_bootstrap(m,age):
-#     coeflist=[]
-#     interlist=[]
-#     for i in range(0,len(m[0])):
-#         mi = m[:,i].reshape(-1,1)
-#         result_coef, result_inter = self.Resample_Sklearn(resample_time ,self.Calculate_Beta_Sklearn,mi,age)
-#         coeflist.append(result_coef)
-#         interlist.append(result_inter)
-#     coeflist =np.array(coeflist)
-#     interlist =np.array(interlist)
-#     #return coeflist, interlist
-#     return coeflist
-# 
-# def m1_jackknife(m,age):
-#     coeflist_jackknife=[]
-#     interlist_jackknife=[]
-#     for i in range(0,len(m[0])):
-#         mjack = m[:,i]
-#         resamples = jackknife_resampling(mjack)
-#         for ii in range(0,len(resamples)):
-#             resamplesi = np.append(resamples[ii],[1])
-#             resamplesi = resamplesi.reshape(-1,1)
-#             result_coef_jackknife,result_inter_jackknife= self.Calculate_Beta_Sklearn(resamplesi,age)
-#             coeflist_jackknife.append(result_coef_jackknife)
-#             interlist_jackknife.append(result_inter_jackknife)
-#         # result = Calculate_Beta_Numpy(mi,age)
-#         # coeflist.append(result)
-#     coeflist_jackknife =np.array(coeflist_jackknife)
-#     interlist_jackknife =np.array(interlist_jackknife)
-#     #return coeflist_jackknife,interlist_jackknife
-#     return coeflist_jackknife
