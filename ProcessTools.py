@@ -13,8 +13,23 @@ from scipy.stats import norm
 
 # Make multivariate normal data. The inputs allow the means, variances and covariances to be adjusted
 # The size of the data is determined by the size of the mean and cov matrix inputs
+# Explore the following:
+# strength of the relationships between 
+# A and B: -1:0.1:1 (20)
+# B and C: -1:0.1:1 (20)
+# A and C: -1:0.1:1 (20)
+# Show how the size of the mediation effect changes
+# Change sample sizes N: 10:10:200 (20)
+# TOTAL SIM = 160,000
 
-# Assume that the last column is the data and the rest are predictors
+# Change A to be dichotomous with equal group size and redo
+# TOTAL SIM = 8,000
+
+# Change A to be dichotomous with unequal group size and redo
+# Group size ratio: 4, 3, 2, 0.5, 0.33, 0.25
+# TOTAL SIM = 48,000
+
+
 
 plt.figure()
 plt.hist(betalist[:,0])
@@ -32,11 +47,31 @@ means = [1,1,1]
 Cov = 0.25
 covs = [[1,Cov,Cov],[Cov,1,Cov],[Cov,Cov,1]]
 data = MakeMultiVariableData(N,means, covs)
-PointEstimate = Calculate_Beta_Sklearn(data)
-BSbetalist,BSinterlist = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
-JKbetalist, JKinterlist = JackKnife(Calculate_Beta_Sklearn, data)
 
-print(PointEstimate)
+
+# Model 1: A --> C, c
+PointEstimate1 = Calculate_Beta_Sklearn(data[:,[0,2]])
+# Model 2: A --> B, a
+PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+# Model 3: A + B --> C, c', b 
+PointEstimate3 = Calculate_Beta_Sklearn(data)
+
+# Total effect
+TE = PointEstimate1[0][0]
+# Indirect effect
+IE = PointEstimate2[0][0]*PointEstimate3[0][1]
+# Direct effect
+DE = PointEstimate3[0][0]
+
+# Bootstrap model 2
+BSbetalist2, BSinterlist2 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+# Bootstrap model 3
+BSbetalist3,BSinterlist3 = Resample_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+
+
+print(PointEstimate2)
 index = 0
 print(CalculateBCaCI(BSbetalist[:,index], JKbetalist[:,index], PointEstimate[0][index], alpha))
 index = 1
@@ -112,8 +147,12 @@ def MakeMultiVariableData(N = 1000, means = [1,1,1], covs = [[1,0,0],[0,1,0],[0,
 def Calculate_Beta_Sklearn(data):
     # using linear regression model from sklearn 
     lm = linear_model.LinearRegression()
+    M = data.shape[1]
     #fit the x,y to the model,x will be a 2d matrix and y is a array
-    model = lm.fit(data[:,[0,-2]], data[:,-1])
+    if M > 2:
+        model = lm.fit(data[:,[0,-2]], data[:,-1])
+    else:
+        model = lm.fit(data[:,[0]], data[:,-1])
     return model.coef_, model.intercept_
 
 def Bootstrap_Sklearn(NBoot, func, data):
