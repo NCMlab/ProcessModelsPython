@@ -46,6 +46,11 @@ alpha = 0.05
 means = [1,1,1]
 Cov = 0.25
 covs = [[1,Cov,Cov],[Cov,1,Cov],[Cov,Cov,1]]
+Cov12 = 0.25
+Cov13 = 0.25
+Cov23 = 0.25
+covs = [[1,Cov12,Cov13],[Cov12,1,Cov23],[Cov13,Cov23,1]]
+
 data = MakeMultiVariableData(N,means, covs)
 np.corrcoef(data.T)
 # Point estimates
@@ -78,12 +83,32 @@ print("DE: %0.3f (%0.3f : %0.3f)"%(DE,DECI[0],DECI[1]))
 print("IE: %0.3f (%0.3f : %0.3f)"%(IE,IECI[0],IECI[1]))
 
 np.corrcoef(data.T)
+
+NSimMC = 100
+NBoot = 200
+N = 200
 MClist = CalculatePower(NSimMC, NBoot, N, alpha, means, covs)
 MClist.sum(0)/NSimMC
 
+# Keep covs
 
-
-
+def SetupAllSims():
+    NSimMC = 20
+    NBoot = 100
+    Cov12 = np.arange(-1,1.1,0.1)
+    Cov13 = np.arange(-1,1.1,0.1)
+    Cov23 = np.arange(-1,1.1,0.1)
+    N = np.arange(10,201,10)
+    NSimAll = Cov12.shape[0]*Cov13.shape[0]*Cov23.shape[0]*N.shape[0]
+    for n in N:
+        for i in Cov12:
+            for j in Cov13:
+                for k in Cov23:
+                    covs = [[1,i,j],[i,1,k],[j,k,1]]
+                    MClist = CalculatePower(NSimMC, NBoot, n, alpha, means, covs)
+                    print(MClist.sum(0)/NSimMC)
+                    
+                    
 def CalculateMediationPEEffect(PointEstimate2, PointEstimate3):
     # Indirect effect
     a = PointEstimate2[0][0]
@@ -109,7 +134,7 @@ def CalculatePower(NSimMC, NBoot, N, alpha, means, covs):
     MClist = np.zeros((NSimMC,5))
     # Repeatedly generate data for Monte Carlo simulations 
     for i in range(NSimMC):
-        print("%d of %d"%(i+1,NSimMC))
+        #print("%d of %d"%(i+1,NSimMC))
         # Make data
         data = MakeMultiVariableData(N,means, covs)
         # Point estimates
