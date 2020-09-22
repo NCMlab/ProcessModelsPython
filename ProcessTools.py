@@ -70,15 +70,23 @@ data = MakeModeratedEffect(data,0,1, effect = 100)
 
 
 data = MakeMultiVariableData(N,[1, 1], [[1,0.99],[0.99,1]])
+
+data = MakeData(N, [1,1], [[1, Cov12],[Cov12,1]], 1,  1,  [0, 0])
 print(np.corrcoef(data.T))
 Calculate_Beta_Sklearn(data)
 
+def TestABC():
+    data = MakeData(100,  [1,1], np.eye(2), 1, 1, [0.5, 0.5])
+    # data = MakeIndependentData(N, means = [0,0,0], stdev = [1,1,1], weights = [0.5, 0.5, 0])
+    print(np.corrcoef(data.T))
 
-data = MakeIndependentData(N, means = [0,0,0], stdev = [1,1,1], weights = [1, 0.5, 0])
-print(np.corrcoef(data.T))
-data.mean(0)
-Calculate_Beta_Sklearn(data)
-
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+    JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+    aCI = CalculateBCaCI(BSbetalist3[:,0], BSbetalist3[:,0], PointEstimate3[0][0], alpha)
+    bCI = CalculateBCaCI(BSbetalist3[:,1], BSbetalist3[:,1], PointEstimate3[0][1], alpha)
+    print("a: %0.3f (%0.3f : %0.3f)"%(PointEstimate3[0][0],aCI[0],aCI[1]))
+    print("b: %0.3f (%0.3f : %0.3f)"%(PointEstimate3[0][1],bCI[0],bCI[1]))
 
 # Point estimates
 ai = 0
@@ -176,7 +184,7 @@ def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
     TE = DE + IE
     return IE, TE, DE, a, b
     
-def CalculateMediationResampleEffect(BSbetalist2, BSbetalist3, ia, ib):
+def CalculateMediationResampleEffect(BSbetalist2, BSbetalist3, ia = 0, ib = 1):
     # Indirect effect
     a = np.squeeze(BSbetalist2[:,ia])
     b = np.squeeze(BSbetalist3[:,ib])
@@ -185,6 +193,41 @@ def CalculateMediationResampleEffect(BSbetalist2, BSbetalist3, ia, ib):
     TE = DE + IE
     return IE, TE, DE, a, b
     
+def CheckMediationPower(NBoot, data):
+    MClist = np.zeros(5)
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    
+    # Bootstrap model 2
+    BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+    JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+    # Bootstrap model 3
+    BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+    JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+    # Bootstrap mediation effects
+    BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+    # Jackknifemediation effects
+    JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+    
+    IECI = CalculateBCaCI(BSIE, JKIE, IE, alpha)
+    TECI = CalculateBCaCI(BSTE, JKTE, TE, alpha)
+    DECI = CalculateBCaCI(BSDE, JKDE, DE, alpha)
+    aCI = CalculateBCaCI(BSa, JKa, a, alpha)
+    bCI = CalculateBCaCI(BSb, JKb, b, alpha)
+    if IECI[0]*IECI[1] > 0:
+        MClist[0] = 1        
+    if TECI[0]*TECI[1] > 0:
+        MClist[1] = 1        
+    if DECI[0]*DECI[1] > 0:
+        MClist[2] = 1        
+    if aCI[0]*aCI[1] > 0:
+        MClist[3] = 1        
+    if bCI[0]*bCI[1] > 0:
+        MClist[4] = 1        
+    return MClist
+
 def CalculatePower(NSimMC, NBoot, N, alpha, means, covs):
 
     # Prepare a matrix for counting significant findings
@@ -307,18 +350,77 @@ def Bootstrap_Sklearn(NBoot, func, data):
         interlist[i] = temp[1]
     return betalist,interlist
 
-def MakeData(
-def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0]):
+def MakeData(N = 1000, means = [1,1], covs = np.eye(2), meanDV = 1, stdDV = 1, weights = [0, 0]):
+    # Make predictors
+    x = np.random.multivariate_normal(means, covs, N)
+    y = np.random.normal(meanDV, stdDV, N)
+
+    for i in range(len(weights)):
+        y = y + x[:,i]*weights[i]
+    data = np.append(x,np.expand_dims(y, axis = 1), axis = 1)
+    return data
+    
+    # Make the predictors related to each other and added a weighted components to the DV
+def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0], Atype = 99):
+    # weights = AtoC, BtoC, AtoB
     # Make sure everything is the correct size
     M = len(means)
     S = len(stdev)
     W = len(weights)
-    if (M == S) and (M == W):
-        data = np.zeros([N,M])
-        # Create independent data
-        for i in range(M):
-            data[:,i] = np.random.normal(means[i], stdev[i], N)
+# try:
+    data = np.zeros([N,M])
+    # Create independent data
+    for i in range(M):
+        data[:,i] = np.random.normal(means[i], stdev[i], N)
+    if Atype == 1:
+        data[:,0] = np.random.uniform(20,80,N)
+    if Atype == 2:
+        data[:,0] = np.concatenate((np.zeros(int(N/2)), np.ones(int(N/2))))
     # Add weights between predictors to DV
     for i in range(M-1):
-        data[:,-1] = ddd= data[:,-1] + (data[:,i])*weights[i]
+        data[:,-1] = data[:,-1] + (data[:,i])*weights[i]
+    data[:,1] = data[:,1] + (data[:,0])*weights[2]
+# except:
+#     data = -99
     return data
+
+def SetupSims():
+    NBoot = 100
+    NSimMC = 100
+    column_names = ['SampleSize','Atype','AtoB','AtoC','BtoC','IE', 'TE', 'DE', 'a', 'b']
+
+    df = pd.DataFrame(columns = column_names)
+    N = np.arange(10,400,50)
+    # covAB = np.arange(-1,1.1,0.33)
+    typeA = [99,1,2] # cont, unif, dicotomous
+    # Aratio = [4,3,2,1,0.5,0.33,0.25]
+    # varA = 1#np.arange(0.1,2.01,0.5)
+    # varB = 1#np.arange(0.1,2.01,0.5)
+    # varC = 1#np.arange(0.1,2.01,0.5)       
+    AtoB = np.arange(0,2.01,0.25)
+    AtoC = np.arange(0,2.01,0.25)
+    BtoC = np.arange(0,2.01,0.25)    
+        
+    count = 0
+    NAllSims = 16767
+    SimData = np.zeros([NAllSims,10])
+    for i1 in N:
+        for i3 in typeA:
+            for i8 in AtoB:
+                for i9 in AtoC:
+                    for i10 in BtoC:
+
+    
+                        MClist = np.zeros((NSimMC,5))  
+                        for j in range(NSimMC):    
+                            data = MakeIndependentData(i1, [1,1,1], [1,1,1], [i8, i9, i10], i3)                            
+                        # MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0], Atype = 99):
+                  
+                            MClist[j,:] =  CheckMediationPower(NBoot, data)
+                        tempMC = MClist.sum(0)/NSimMC
+                        new_row = [i1, i3, i8, i9, i10, tempMC[0], tempMC[1], tempMC[2], tempMC[3], tempMC[4]]
+                        print("%d out of %d"%(count, NAllSims))
+                        SimData[count,:] = new_row
+                        # this_column = df.columns[count]
+                        # df[this_column] = new_row
+                        count += 1
