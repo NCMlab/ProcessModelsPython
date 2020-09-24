@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import norm
 import time
+import sys
 # Make multivariate normal data. The inputs allow the means, variances and covariances to be adjusted
 # The size of the data is determined by the size of the mean and cov matrix inputs
 # Explore the following:
@@ -401,12 +402,12 @@ def SetupSims(NBoot, NSimMC, Tag):
     # varA = 1#np.arange(0.1,2.01,0.5)
     # varB = 1#np.arange(0.1,2.01,0.5)
     # varC = 1#np.arange(0.1,2.01,0.5)       
-    AtoB = np.arange(-1.0,1.01,0.5)
-    AtoC = np.arange(-1.0,1.01,0.5)
-    BtoC = np.arange(-1.0,1.01,0.5)    
+    AtoB = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    AtoC = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    BtoC = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
         
     count = 0
-    NAllSims = 1875
+    NAllSims = 7680
     SimData = np.zeros([NAllSims,10])
     for i1 in N:
         for i3 in typeA:
@@ -414,8 +415,8 @@ def SetupSims(NBoot, NSimMC, Tag):
                 for i9 in AtoC:
                     for i10 in BtoC:
                         t = time.time()
-    #                     count += 1
-    # print(count)
+                        #count += 1
+    #print(count)
     
                         MClist = np.zeros((NSimMC,5))  
                         for j in range(NSimMC):    
@@ -423,23 +424,32 @@ def SetupSims(NBoot, NSimMC, Tag):
                         # MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0], Atype = 99):
                   
                             MClist[j,:] =  CheckMediationPower(NBoot, data)
-                        tempMC = MClist.sum(0)/NSimMC
+                        tempMC = MClist.sum(0)
                         new_row = [i1, i3, i8, i9, i10, tempMC[0], tempMC[1], tempMC[2], tempMC[3], tempMC[4]]
-                        print("%d out of %d in %0.3f sec"%(count, NAllSims, time.time() - t))
+                        #print("%d out of %d in %0.3f sec"%(count, NAllSims, time.time() - t))
                         SimData[count,:] = new_row
                         # this_column = df.columns[count]
                         # df[this_column] = new_row
                         count += 1
     np.savetxt('SimData092220'+Tag+'.csv',SimData, delimiter = ',')
 
+
+    
+
+def main(argv):
+    SetupSims(1000,10,sys.argv[1:][0])
+
+if __name__ == "__main__":
+    main(sys.argv[1:][0])
+
 def RunAll():
-    SetupSims(1000, 10, '001')
-    SetupSims(1000, 10, '002')
-    SetupSims(1000, 10, '003')
-    SetupSims(1000, 10, '004')
-    SetupSims(1000, 10, '005')
-    SetupSims(1000, 10, '006')                    
-    SetupSims(1000, 10, '007')
-    SetupSims(1000, 10, '008')
-    SetupSims(1000, 10, '009')
-    SetupSims(1000, 10, '010')            
+    SetupSims(1000, 10, 'VM001')
+    SetupSims(1000, 10, 'VM002')
+    SetupSims(1000, 10, 'VM003')
+    SetupSims(1000, 10, 'VM004')
+    SetupSims(1000, 10, 'VM005')
+    SetupSims(1000, 10, 'VM006')                    
+    SetupSims(1000, 10, 'VM007')
+    SetupSims(1000, 10, 'VM008')
+    SetupSims(1000, 10, 'VM009')
+    SetupSims(1000, 10, 'VM010')            
