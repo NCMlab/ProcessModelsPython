@@ -12,6 +12,7 @@ import seaborn as sns
 from scipy.stats import norm
 import time
 import sys
+import os
 # Make multivariate normal data. The inputs allow the means, variances and covariances to be adjusted
 # The size of the data is determined by the size of the mean and cov matrix inputs
 # Explore the following:
@@ -157,24 +158,6 @@ def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
     # Append the moderator to the data 
     return OutData
 
-
-def SetupAllSims():
-    alpha = 0.05
-    NSimMC = 20
-    NBoot = 100
-    Cov12 = np.arange(-1,1.1,0.1)
-    Cov13 = np.arange(-1,1.1,0.1)
-    Cov23 = np.arange(-1,1.1,0.1)
-    N = np.arange(10,201,10)
-    NSimAll = Cov12.shape[0]*Cov13.shape[0]*Cov23.shape[0]*N.shape[0]
-    for n in N:
-        for i in Cov12:
-            for j in Cov13:
-                for k in Cov23:
-                    covs = [[1,i,j],[i,1,k],[j,k,1]]
-                    MClist = CalculatePower(NSimMC, NBoot, n, alpha, means, covs)
-                    print(MClist.sum(0)/NSimMC)
-                    
                     
 def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
     # Indirect effect
@@ -387,7 +370,7 @@ def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0
 #     data = -99
     return data
 
-def SetupSims(NBoot, NSimMC, Tag):
+def SetupSims(NBoot, NSimMC):
 
     alpha = 0.05
     # NBoot = 100
@@ -395,7 +378,7 @@ def SetupSims(NBoot, NSimMC, Tag):
     column_names = ['SampleSize','Atype','AtoB','AtoC','BtoC','IE', 'TE', 'DE', 'a', 'b']
 
     df = pd.DataFrame(columns = column_names)
-    N = [10,50,100,150,200]#np.arange(10,400,20)
+    N = np.arange(10,400,20)
     # covAB = np.arange(-1,1.1,0.33)
     typeA = [99,1,2] # cont, unif, dicotomous
     # Aratio = [4,3,2,1,0.5,0.33,0.25]
@@ -407,16 +390,20 @@ def SetupSims(NBoot, NSimMC, Tag):
     BtoC = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
         
     count = 0
-    NAllSims = 7680
-    SimData = np.zeros([NAllSims,10])
     for i1 in N:
         for i3 in typeA:
             for i8 in AtoB:
                 for i9 in AtoC:
                     for i10 in BtoC:
-                        t = time.time()
-                        #count += 1
-    #print(count)
+                        count += 1
+    NAllSims = count
+    SimData = np.zeros([NAllSims,10])
+    count = 0
+    for i1 in N:
+        for i3 in typeA:
+            for i8 in AtoB:
+                for i9 in AtoC:
+                    for i10 in BtoC:
     
                         MClist = np.zeros((NSimMC,5))  
                         for j in range(NSimMC):    
@@ -431,25 +418,27 @@ def SetupSims(NBoot, NSimMC, Tag):
                         # this_column = df.columns[count]
                         # df[this_column] = new_row
                         count += 1
-    np.savetxt('SimData092220'+Tag+'.csv',SimData, delimiter = ',')
-
-
+    return SimData
     
 
-def main(argv):
-    SetupSims(1000,10,sys.argv[1:][0])
+
+def main():
+    # Pass the process ID to use for setting the seed
+    pid = os.getpid() 
+    # Set the seed
+    np.random.seed(pid + int(time.time()))
+    # Run the sim
+    NBoot = 1000
+    NMCSim = 10
+    SimData = SetupSims(NBoot,NCSim)
+    # Make outputfile name
+    clock = time.localtime()
+    OutFileName = "SimData_NB_%d_NMC_%d_"%(NBoot,NMCSim)
+    OutFileName = OutFileName+str(clock.tm_hour)+"_"+str(clock.tm_min)+"_"+str(clock.tm_sec)+"__"+str(clock.tm_mon)+"_"+str(clock.tm_mday)+"_"+str(clock.tm_year)
+    OutFileName = OutFileName+'.csv'
+    np.savetxt(OutFileName,SimData, delimiter = ',')
 
 if __name__ == "__main__":
-    main(sys.argv[1:][0])
+    main()
 
-def RunAll():
-    SetupSims(1000, 10, 'VM001')
-    SetupSims(1000, 10, 'VM002')
-    SetupSims(1000, 10, 'VM003')
-    SetupSims(1000, 10, 'VM004')
-    SetupSims(1000, 10, 'VM005')
-    SetupSims(1000, 10, 'VM006')                    
-    SetupSims(1000, 10, 'VM007')
-    SetupSims(1000, 10, 'VM008')
-    SetupSims(1000, 10, 'VM009')
-    SetupSims(1000, 10, 'VM010')            
+       
