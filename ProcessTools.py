@@ -413,7 +413,7 @@ def SetupSims(NBoot, NSimMC):
                             MClist[j,:] =  CheckMediationPower(NBoot, data)
                         tempMC = MClist.sum(0)
                         new_row = [i1, i3, i8, i9, i10, tempMC[0], tempMC[1], tempMC[2], tempMC[3], tempMC[4]]
-                        #print("%d out of %d in %0.3f sec"%(count, NAllSims, time.time() - t))
+                        print("%d out of %d in %0.3f sec"%(count, NAllSims, time.time() - t))
                         SimData[count,:] = new_row
                         # this_column = df.columns[count]
                         # df[this_column] = new_row
