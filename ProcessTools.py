@@ -399,6 +399,7 @@ def SetupSims(NBoot, NSimMC):
     NAllSims = count
     SimData = np.zeros([NAllSims,10])
     count = 0
+    t = time.time()
     for i1 in N:
         for i3 in typeA:
             for i8 in AtoB:
@@ -418,6 +419,7 @@ def SetupSims(NBoot, NSimMC):
                         # this_column = df.columns[count]
                         # df[this_column] = new_row
                         count += 1
+                        t = time.time()
     return SimData
     
 
