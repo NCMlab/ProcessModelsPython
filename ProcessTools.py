@@ -430,7 +430,7 @@ def main():
     # Run the sim
     NBoot = 1000
     NMCSim = 10
-    SimData = SetupSims(NBoot,NCSim)
+    SimData = SetupSims(NBoot,NMCSim)
     # Make outputfile name
     clock = time.localtime()
     OutFileName = "SimData_NB_%d_NMC_%d_"%(NBoot,NMCSim)
