@@ -371,7 +371,7 @@ def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0
     return data
 
 def SetupSims(NBoot, NSimMC):
-
+    print("Starting the setup")
     alpha = 0.05
     # NBoot = 100
     # NSimMC = 100
@@ -397,6 +397,7 @@ def SetupSims(NBoot, NSimMC):
                     for i10 in BtoC:
                         count += 1
     NAllSims = count
+    print("There will be %d simulations run"%(NAllSims))
     SimData = np.zeros([NAllSims,10])
     count = 0
     t = time.time()
@@ -431,7 +432,7 @@ def main():
     np.random.seed(pid + int(time.time()))
     # Run the sim
     NBoot = 1000
-    NMCSim = 10
+    NMCSim = 1
     SimData = SetupSims(NBoot,NMCSim)
     # Make outputfile name
     clock = time.localtime()
