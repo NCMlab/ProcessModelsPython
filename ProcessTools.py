@@ -431,7 +431,7 @@ def CalculateIndPower(NBoot, NSimMC, N, alpha, AtoB, AtoC, BtoC, typeA):
     MClist = np.zeros((NSimMC,5))
     # Repeatedly generate data for Monte Carlo simulations 
     for i in range(NSimMC):
-        #print("%d of %d"%(i+1,NSimMC))
+        print("%d of %d"%(i+1,NSimMC))
         # Make data
         data = MakeIndependentData(N, [1,1,1], [1,1,1], [AtoB, AtoC, BtoC], typeA)
         # data = MakeMultiVariableData(N,means, covs)
@@ -501,7 +501,7 @@ def MakeBatchScripts():
                             f.write("#SBATCH --time=01:00:00\n")
                             f.write("#SBATCH --account=def-steffejr-ab\n")
                             f.write("#SBATCH --mem-per-cpu=512M\n\n")
-                            f.write("source ~/ENV/bin/activate")
+                            f.write("source ~/ENV/bin/activate\n")
                             f.write("python ProcessTools.py %d %d %d %0.2f %0.2f %0.2f %d\n" %(1000,1000,i1,i8,i9,i10,i3))
                             f.close()
                             # submit the file to the queue
