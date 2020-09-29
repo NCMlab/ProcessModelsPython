@@ -505,7 +505,7 @@ def MakeBatchScripts():
                             f.close()
                             # submit the file to the queue
                             os.system('sbatch %s.sh'%(fileName))
-                            Str = 
+
     print(count)
 
 def main():
