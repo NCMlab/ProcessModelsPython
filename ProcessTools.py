@@ -530,6 +530,7 @@ def main():
         np.savetxt(OutFileName, outdata, delimiter = ',')
 
 if __name__ == "__main__":
-     main()
+    MakeBatchScripts()
+    # main()
 
        
