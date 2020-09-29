@@ -504,7 +504,7 @@ def MakeBatchScripts():
                             f.write("python ProcessTools.py %d %d %d %0.2f %0.2f %0.2f %d\n" %(1000,1000,i1,i8,i9,i10,i3))
                             f.close()
                             # submit the file to the queue
-                            os.system('sbatch %s.sh'%(fileName))
+                            # os.system('sbatch %s.sh'%(fileName))
 
     print(count)
 
