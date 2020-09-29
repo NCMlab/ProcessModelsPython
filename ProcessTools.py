@@ -385,9 +385,9 @@ def SetupSims(NBoot, NSimMC):
     # varA = 1#np.arange(0.1,2.01,0.5)
     # varB = 1#np.arange(0.1,2.01,0.5)
     # varC = 1#np.arange(0.1,2.01,0.5)       
-    AtoB = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
-    AtoC = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
-    BtoC = [-0.4, -0.3, -0.2, -0.1, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+    AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    AtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
         
     count = 0
     for i1 in N:
@@ -406,7 +406,8 @@ def SetupSims(NBoot, NSimMC):
             for i8 in AtoB:
                 for i9 in AtoC:
                     for i10 in BtoC:
-    
+                        print()
+                        
                         MClist = np.zeros((NSimMC,5))  
                         for j in range(NSimMC):    
                             data = MakeIndependentData(i1, [1,1,1], [1,1,1], [i8, i9, i10], i3)                            
@@ -473,6 +474,34 @@ def CalculateIndPower(NBoot, NSimMC, N, alpha, AtoB, AtoC, BtoC, typeA):
     print("Run time was: %0.2f"%(time.time() - t))
     
     return outdata
+
+def MakeBatchScripts():
+    #N = np.arange(10,101,10)
+    N = [100]
+    typeA = [99,1,2] # cont, unif, dicotomous     
+    AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    AtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+        
+    count = 0
+    for i1 in N:
+        for i3 in typeA:
+            for i8 in AtoB:
+                for i9 in AtoC:
+                    for i10 in BtoC:
+                        count += 1
+                        if count == 1:
+                            # Create the script file
+                            f = open("submit_Process.sh", "w")
+                            f.write("#!/bin/bash\n")                        
+                            f.write("#SBATCH --time=06:00:00\n")
+                            f.write("#SBATCH --account=def-steffejr-ab\n")
+                            f.write("#SBATCH --mem-per-cpu=1024M\n")
+                            f.write("python ProcessTools.py %d %d %d %0.2f %0.2f %0.2f %d\n" %(1000,1000,i1,i8,i9,i10,i3))
+                            f.close()
+                            # submit the file to the queue
+                            os.system('sbatch submit_Process.sh')
+                            
 
 def main():
     if len(sys.argv[1:]) != 7:
