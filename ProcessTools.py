@@ -490,20 +490,20 @@ def MakeBatchScripts():
                 for i9 in AtoC:
                     for i10 in BtoC:
                         count += 1
-                        #if count == 1:
+                        if count < 8:
                             # Create the script file
-                        # f = open("submit_Process.sh", "w")
-                        # f.write("#!/bin/bash\n")                 
-                        # f.write("SBATCH --job-name=%j.job
-                        # f.write("SBATCH --output=.out/%j.out")
-                        # f.write("SBATCH --error=.out/%j.err")
-                        # f.write("#SBATCH --time=01:00:00\n")
-                        # f.write("#SBATCH --account=def-steffejr-ab\n")
-                        # f.write("#SBATCH --mem-per-cpu=512M\n")
-                        # f.write("python ProcessTools.py %d %d %d %0.2f %0.2f %0.2f %d\n" %(1000,1000,i1,i8,i9,i10,i3))
-                        # f.close()
-                        # # submit the file to the queue
-                        # os.system('sbatch submit_Process.sh')
+                            f = open("submit_Process.sh", "w")
+                            f.write("#!/bin/bash\n")                 
+                            f.write("SBATCH --job-name=%j.job\n")
+                            f.write("SBATCH --output=.out/%j.out\n")
+                            f.write("SBATCH --error=.out/%j.err\n")
+                            f.write("#SBATCH --time=01:00:00\n")
+                            f.write("#SBATCH --account=def-steffejr-ab\n")
+                            f.write("#SBATCH --mem-per-cpu=512M\n")
+                            f.write("python ProcessTools.py %d %d %d %0.2f %0.2f %0.2f %d\n" %(1000,1000,i1,i8,i9,i10,i3))
+                            f.close()
+                            # submit the file to the queue
+                            os.system('sbatch submit_Process.sh')
     print(count)
 
 def main():
