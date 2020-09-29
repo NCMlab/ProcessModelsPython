@@ -509,34 +509,34 @@ def MakeBatchScripts():
 
     print(count)
 
-# def main():
-#     if len(sys.argv[1:]) != 7:
-#         print("ERROR")
-#     else:
-#         # Pass the process ID to use for setting the seed
-#         pid = os.getpid() 
-#         # Set the seed
-#         np.random.seed(pid + int(time.time()))
-#         # Run the sim
-#         NBoot = int(sys.argv[1:][0])
-#         NSim = int(sys.argv[1:][1])
-#         N = int(sys.argv[1:][2])
-#         AtoB = float(sys.argv[1:][3])
-#         AtoC = float(sys.argv[1:][4])
-#         BtoC = float(sys.argv[1:][5])
-#         Atype = int(sys.argv[1:][6])
-#         alpha = 0.05
-#         outdata = CalculateIndPower(NBoot,NSim, N, alpha, AtoB, AtoC, BtoC, Atype)
+def main():
+    if len(sys.argv[1:]) != 7:
+        print("ERROR")
+    else:
+        # Pass the process ID to use for setting the seed
+        pid = os.getpid() 
+        # Set the seed
+        np.random.seed(pid + int(time.time()))
+        # Run the sim
+        NBoot = int(sys.argv[1:][0])
+        NSim = int(sys.argv[1:][1])
+        N = int(sys.argv[1:][2])
+        AtoB = float(sys.argv[1:][3])
+        AtoC = float(sys.argv[1:][4])
+        BtoC = float(sys.argv[1:][5])
+        Atype = int(sys.argv[1:][6])
+        alpha = 0.05
+        outdata = CalculateIndPower(NBoot,NSim, N, alpha, AtoB, AtoC, BtoC, Atype)
         
-#         # Make outputfile name
-#         clock = time.localtime()
-#         OutFileName = "SimData_NB_%d_NSim_%d_"%(NBoot,NSim)
-#         OutFileName = OutFileName+str(clock.tm_hour)+"_"+str(clock.tm_min)+"__"+str(clock.tm_mon)+"_"+str(clock.tm_mday)+"_"+str(clock.tm_year)
-#         OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
-#         np.savetxt(OutFileName, outdata, delimiter = ',')
+        # Make outputfile name
+        clock = time.localtime()
+        OutFileName = "SimData_NB_%d_NSim_%d_"%(NBoot,NSim)
+        OutFileName = OutFileName+str(clock.tm_hour)+"_"+str(clock.tm_min)+"__"+str(clock.tm_mon)+"_"+str(clock.tm_mday)+"_"+str(clock.tm_year)
+        OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
+        np.savetxt(OutFileName, outdata, delimiter = ',')
 
 if __name__ == "__main__":
-    MakeBatchScripts()
-    # main()
+    #MakeBatchScripts()
+    main()
 
        
