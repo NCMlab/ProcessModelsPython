@@ -477,7 +477,7 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC ):
 
 
 def main():
-    if len(sys.argv[1:]) != 7:
+    if len(sys.argv[1:]) != 8:
         print("ERROR")
     else:
         print("Getting ready")
