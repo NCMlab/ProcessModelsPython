@@ -10,7 +10,8 @@ Load up all result files and organize them
 import os
 import csv
 import pandas as pd
-DataFolder = "/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython"
+
+DataFolder = "/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython/Data"
 # How many result files are there?
 
 cNames = ['Nboot','NSim','N','AtoB', 'AtoC', 'BtoC', 'typeA','powIE', 'powTE', 'powDE', 'powa', 'powb']
@@ -31,7 +32,7 @@ count = 0
 for filename in os.listdir(DataFolder):
     if filename.endswith(".csv"): 
 
-        print(os.path.join(DataFolder, filename))
+       # print(os.path.join(DataFolder, filename))
         with open(os.path.join(DataFolder, filename), newline='') as f:
             reader = csv.reader(f)
             data = list(reader)
@@ -44,4 +45,4 @@ for filename in os.listdir(DataFolder):
         df = df.append(row, ignore_index = True)
         count += 1
         
-
+print(count)
