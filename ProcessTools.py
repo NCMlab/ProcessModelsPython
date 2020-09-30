@@ -475,42 +475,6 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC ):
     
     return outdata
 
-def MakeBatchScripts():
-    BaseDir = "/home/steffejr/scratch/Project"
-    N = np.arange(10,101,10)
-    #N = [100]
-    typeA = [99,1,2] # cont, unif, dicotomous     
-    AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
-    AtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
-    BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
-        
-    count = 0
-    for i1 in N:
-        for i3 in typeA:
-            for i8 in AtoB:
-                for i9 in AtoC:
-                    #for i10 in BtoC:
-                        count += 1
-                        if count < 8:
-                            # Create the script file
-                            fileName = "submit_Process_%05d"%(count)
-                            f = open(os.path.join(BaseDir, 'jobs', fileName+".sh"), "w")
-                            f.write("#!/bin/bash\n")                 
-                            f.write("#SBATCH --job-name=%s.job\n"%(os.path.join(BaseDir, 'jobs', fileName)))
-                            f.write("#SBATCH --output=%s.out\n"%(os.path.join(BaseDir, 'out', fileName)))
-                            f.write("#SBATCH --error=%s.err\n"%(os.path.join(BaseDir, 'out', fileName)))
-                            f.write("#SBATCH --time=01:00:00\n")
-                            f.write("#SBATCH --account=def-steffejr-ab\n")
-                            f.write("#SBATCH --mem-per-cpu=512M\n\n")
-                            # Added an array for at least one dimension of simulations
-                            f.write("#SBATCH --array=1-9\n")
-                            f.write("source ~/ENV/bin/activate\n")
-                            f.write("python ProcessTools.py %d %d %d %d %0.2f %0.2f %s\n" %(1000,1000,i1,i3, i8,i9, '$SLURM_ARRAY_TASK_ID'))
-                            f.close()
-                            # submit the file to the queue
-                            # os.system('sbatch %s.sh'%(fileName))
-
-    print(count)
 
 def main():
     if len(sys.argv[1:]) != 7:
@@ -528,7 +492,8 @@ def main():
         Atype = int(sys.argv[1:][3])
         AtoB = float(sys.argv[1:][4])
         AtoC = float(sys.argv[1:][5])
-        BtoC = float(sys.argv[1:][6])
+        OutDir = sys.argv[1:][6]
+        BtoC = float(sys.argv[1:][7])
         BtoCArray = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
         # If this parameter is too big then assume that the sbatch array was used
         if BtoC > 0.9:
@@ -544,7 +509,7 @@ def main():
         OutFileName = "SimData_NB_%d_NSim_%d_"%(NBoot,NSim)
         OutFileName = OutFileName+str(clock.tm_hour)+"_"+str(clock.tm_min)+"__"+str(clock.tm_mon)+"_"+str(clock.tm_mday)+"_"+str(clock.tm_year)
         OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
-        np.savetxt(OutFileName, outdata, delimiter = ',')
+        np.savetxt(os.path.join(OutDir, OutFileName), outdata, delimiter = ',')
 
 if __name__ == "__main__":
     #MakeBatchScripts()
