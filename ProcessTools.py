@@ -476,6 +476,7 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC ):
     return outdata
 
 def MakeBatchScripts():
+    BaseDir = "/home/steffejr/scratch/Project"
     N = np.arange(10,101,10)
     #N = [100]
     typeA = [99,1,2] # cont, unif, dicotomous     
@@ -493,11 +494,11 @@ def MakeBatchScripts():
                         if count < 8:
                             # Create the script file
                             fileName = "submit_Process_%05d"%(count)
-                            f = open(fileName+".sh", "w")
+                            f = open(os.path.join(os.path.join(BaseDir, 'jobs', fileName+".sh"), "w"))
                             f.write("#!/bin/bash\n")                 
-                            f.write("#SBATCH --job-name=%s.job\n"%(fileName))
-                            f.write("#SBATCH --output=out/%s.out\n"%(fileName))
-                            f.write("#SBATCH --error=out/%s.err\n"%(fileName))
+                            f.write("#SBATCH --job-name=%s.job\n"%(os.path.join(BaseDir, fileName)))
+                            f.write("#SBATCH --output=out/%s.out\n"%(os.path.join(BaseDir, fileName)))
+                            f.write("#SBATCH --error=out/%s.err\n"%(os.path.join(BaseDir, fileName)))
                             f.write("#SBATCH --time=01:00:00\n")
                             f.write("#SBATCH --account=def-steffejr-ab\n")
                             f.write("#SBATCH --mem-per-cpu=512M\n\n")
