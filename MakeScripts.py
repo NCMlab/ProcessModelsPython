@@ -26,7 +26,7 @@ def MakeBatchScripts():
                 for i9 in AtoC:
                     #for i10 in BtoC:
                         count += 1
-                        if count < 8:
+                        if count > -1:
                             # Create the script file
                             fileName = "submit_Process_%05d"%(count)
                             f = open(os.path.join(BaseDir, 'jobs', fileName+".sh"), "w")
@@ -38,7 +38,7 @@ def MakeBatchScripts():
                             f.write("#SBATCH --account=def-steffejr-ab\n")
                             f.write("#SBATCH --mem-per-cpu=512M\n\n")
                             # Added an array for at least one dimension of simulations
-                            f.write("#SBATCH --array=1-10\n")
+                            f.write("#SBATCH --array=1-9\n")
                             f.write("source ~/ENV/bin/activate\n")
                             f.write("python %s %d %d %d %d %0.2f %0.2f %s %s\n" %(os.path.join(CodeDir, "ProcessTools.py"), 1000,1000,i1,i3, i8,i9, OutDir, '$SLURM_ARRAY_TASK_ID'))
                             f.close()
