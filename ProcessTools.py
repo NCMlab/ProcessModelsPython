@@ -494,7 +494,7 @@ def MakeBatchScripts():
                         if count < 8:
                             # Create the script file
                             fileName = "submit_Process_%05d"%(count)
-                            f = open(os.path.join(os.path.join(BaseDir, 'jobs', fileName+".sh"), "w"))
+                            f = open(os.path.join(BaseDir, 'jobs', fileName+".sh"), "w")
                             f.write("#!/bin/bash\n")                 
                             f.write("#SBATCH --job-name=%s.job\n"%(os.path.join(BaseDir, fileName)))
                             f.write("#SBATCH --output=out/%s.out\n"%(os.path.join(BaseDir, fileName)))
