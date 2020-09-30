@@ -424,7 +424,7 @@ def SetupSims(NBoot, NSimMC):
                         t = time.time()
     return SimData
     
-def CalculateIndPower(NBoot, NSimMC, N, alpha, AtoB, AtoC, BtoC, typeA):
+def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC ):
     print("Starting simulations...")
     t = time.time()
     # Prepare a matrix for counting significant findings
@@ -488,7 +488,7 @@ def MakeBatchScripts():
         for i3 in typeA:
             for i8 in AtoB:
                 for i9 in AtoC:
-                    for i10 in BtoC:
+                    #for i10 in BtoC:
                         count += 1
                         if count < 8:
                             # Create the script file
@@ -501,8 +501,10 @@ def MakeBatchScripts():
                             f.write("#SBATCH --time=01:00:00\n")
                             f.write("#SBATCH --account=def-steffejr-ab\n")
                             f.write("#SBATCH --mem-per-cpu=512M\n\n")
+                            # Added an array for at least one dimension of simulations
+                            f.write("#SBATCH --array=1-9\n")
                             f.write("source ~/ENV/bin/activate\n")
-                            f.write("python ProcessTools.py %d %d %d %0.2f %0.2f %0.2f %d\n" %(1000,1000,i1,i8,i9,i10,i3))
+                            f.write("python ProcessTools.py %d %d %d %d %0.2f %0.2f %s\n" %(1000,1000,i1,i3, i8,i9, '$SLURM_ARRAY_TASK_ID'))
                             f.close()
                             # submit the file to the queue
                             # os.system('sbatch %s.sh'%(fileName))
@@ -513,6 +515,7 @@ def main():
     if len(sys.argv[1:]) != 7:
         print("ERROR")
     else:
+        print("Getting ready")
         # Pass the process ID to use for setting the seed
         pid = os.getpid() 
         # Set the seed
@@ -521,13 +524,20 @@ def main():
         NBoot = int(sys.argv[1:][0])
         NSim = int(sys.argv[1:][1])
         N = int(sys.argv[1:][2])
-        AtoB = float(sys.argv[1:][3])
-        AtoC = float(sys.argv[1:][4])
-        BtoC = float(sys.argv[1:][5])
-        Atype = int(sys.argv[1:][6])
-        alpha = 0.05
-        outdata = CalculateIndPower(NBoot,NSim, N, alpha, AtoB, AtoC, BtoC, Atype)
+        Atype = int(sys.argv[1:][3])
+        AtoB = float(sys.argv[1:][4])
+        AtoC = float(sys.argv[1:][5])
+        BtoC = float(sys.argv[1:][6])
+        BtoCArray = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+        # If this parameter is too big then assume that the sbatch array was used
+        if BtoC > 0.9:
+            BtoC = BtoCArray[int(BtoC)-1]
+            
         
+        alpha = 0.05
+        print("Calling the simulator")
+        outdata = CalculateIndPower(NBoot,NSim, N, Atype, alpha, AtoB, AtoC, BtoC)
+        print("Done with the simulations")
         # Make outputfile name
         clock = time.localtime()
         OutFileName = "SimData_NB_%d_NSim_%d_"%(NBoot,NSim)
