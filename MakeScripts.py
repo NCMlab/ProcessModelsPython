@@ -45,3 +45,6 @@ def MakeBatchScripts():
                             # os.system('sbatch %s.sh'%(fileName))
 
     print(count)
+
+if __name__ == "__main__":
+    MakeBatchScripts()
