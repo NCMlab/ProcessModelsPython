@@ -46,3 +46,4 @@ for filename in os.listdir(DataFolder):
         count += 1
         
 print(count)
+df.to_csv('Data01.csv')
