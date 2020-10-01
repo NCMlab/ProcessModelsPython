@@ -10,9 +10,14 @@ Load up all result files and organize them
 import os
 import csv
 import pandas as pd
+
 def main():
 #DataFolder = "/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython"
     DataFolder = "/home/steffejr/Data"
+
+
+
+
 # How many result files are there?
 
     cNames = ['Nboot','NSim','N','AtoB', 'AtoC', 'BtoC', 'typeA','powIE', 'powTE', 'powDE', 'powa', 'powb']
@@ -40,6 +45,7 @@ def main():
             li = []
             for i in data: 
                 li.append(i[0])
+
     
             row = pd.Series(li, index = cNames)
         

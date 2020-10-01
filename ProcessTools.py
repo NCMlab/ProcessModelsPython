@@ -356,6 +356,7 @@ def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0
 # try:
     data = np.zeros([N,M])
     # Create independent data
+    # columns are A, B, C
     for i in range(M):
         data[:,i] = np.random.normal(means[i], stdev[i], N)
     if Atype == 1:
@@ -363,9 +364,18 @@ def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0
     if Atype == 2:
         data[:,0] = np.concatenate((np.zeros(int(N/2)), np.ones(int(N/2))))
     # Add weights between predictors to DV
+    AtoB = weights[-1]
+    AtoC = weights[0]
+    BtoC = weights[1]
+    # Make C data
+    # Make a weighted combo of A and B
+    temp = np.zeros(N)
     for i in range(M-1):
-        data[:,-1] = data[:,-1] + (data[:,i])*weights[i]
-    data[:,1] = data[:,1] + (data[:,0])*weights[2]
+        temp = temp + (data[:,i])*weights[i]
+    # Add thsi weighted combo to C
+    data[:,-1] = temp + data[:,-1]
+    # Make B data    
+    data[:,1] = data[:,1] + (data[:,0])*AtoB
 # except:
 #     data = -99
     return data
