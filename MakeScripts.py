@@ -58,7 +58,7 @@ def MakeBatchScripts():
                             dfOut = dfOut.append(row, ignore_index = True)
                             
                             # submit the file to the queue
-                            os.system('sbatch %s.sh'%(os.path.join(BaseDir, 'jobs', fileName+".sh")))
+                            os.system('sbatch %s'%(os.path.join(BaseDir, 'jobs', fileName+".sh")))
                             time.sleep(0.1)
     print("Saving submission list to file: %s"%SubmissionListFileName)
     dfOut.to_csv(SubmissionListFileName)
