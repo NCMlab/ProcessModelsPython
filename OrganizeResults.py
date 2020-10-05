@@ -36,8 +36,8 @@ def main():
 # Read the data
     count = 0
     for filename in os.listdir(DataFolder):
-        if filename.endswith(".csv"): 
-
+        # if filename.endswith(".csv"): 
+        if filename.endswith(".csv") and filename.startswith('SimData'):
             print(os.path.join(DataFolder, filename))
             with open(os.path.join(DataFolder, filename), newline='') as f:
                 reader = csv.reader(f)
@@ -46,7 +46,6 @@ def main():
             for i in data: 
                 li.append(i[0])
 
-    
             row = pd.Series(li, index = cNames)
         
             df = df.append(row, ignore_index = True)

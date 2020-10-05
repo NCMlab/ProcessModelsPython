@@ -290,6 +290,30 @@ def CalculateBCaCI(BS, JK, PE, alpha):
         PCTupper = np.percentile(BS,Alpha2*100)
         BCaCI = [PCTlower, PCTupper]
     return BCaCI
+
+def ExploringIdea():  
+    # How do the variance in the simulated data, the weights, the betas and the Bs 
+    # relate to each other?
+    N = 100
+    data = MakeIndependentData(N, [1,15,1], [10,10,100], [0.5, 0.5, 0.5], 99)
+    beta, beta0 = Calculate_Beta_Sklearn(data)
+    
+    lm = linear_model.LinearRegression()
+    X = data[:,0:-2]
+    y = data[:,-2]
+    model = lm.fit(X,y)
+    beta = model.coef_
+    
+    B = beta*X.std(0)/y.std()
+    print(beta)
+    print(B)
+    
+def CalculateKappaEffectSize():
+    # https://github.com/NCMlab/ProcessModelsNeuroImage/blob/master/FinalCode/CalculateKappa2.m
+    pass
+
+def CalculateRegressionEffectSizes():
+    pass
     
 def MakeMultiVariableData(N = 1000, means = [1,1,1], covs = [[1,0,0],[0,1,0],[0,0,1]]):
     x = np.random.multivariate_normal(means, covs, N)
