@@ -20,7 +20,7 @@ def MakeBatchScripts():
     OutDir = '/Users/jasonsteffener/Documents/GitHub'
     CodeDir = "/home/steffejr/scratch/ProcessModelsPython"
     SubmissionListFileName = os.path.join(OutDir,'SubmissionList.csv')    
-    N = np.arange(10,101,10)
+    N = np.arange(110,151,10)
     #N = [100]
     typeA = [99,1,2] # cont, unif, dicotomous     
     AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
