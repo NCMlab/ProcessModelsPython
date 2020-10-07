@@ -342,8 +342,9 @@ def main():
         OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
         np.savetxt(os.path.join(OutDir, OutFileName), outdata, delimiter = ',')
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #     #MakeBatchScripts()
 #     main()
+    RunEffectSizeSimulations()
 
        
