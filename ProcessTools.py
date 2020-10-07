@@ -89,22 +89,73 @@ def ExploringIdea():
     # How do the variance in the simulated data, the weights, the betas and the Bs 
     # relate to each other?
     N = 100
-    data = MakeIndependentData(N, [1,15,1], [10,10,100], [0.5, 0.5, 0.5], 99)
-    beta, beta0 = Calculate_Beta_Sklearn(data)
     
-    lm = linear_model.LinearRegression()
-    X = data[:,0:-2]
-    y = data[:,-2]
-    model = lm.fit(X,y)
-    beta = model.coef_
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [0.25, 0.25, 0.25], 99)
+
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+        # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    print("a: %0.3f"%(a))
+    print("b: %0.3f"%(b))
+    print(Calculate_standardizedB(data, PointEstimate3[0]))
+    print(CalculateKappaEffectSize(data, a, b))
     
-    B = beta*X.std(0)/y.std()
-    print(beta)
-    print(B)
+def CalculateSimulatedEffectSizes(N, AtoB, AtoC, BtoC, typeA):
+    # Using provided assigned effects, calculate the estimated effects
+    # and the standardied effect sizes
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [AtoB, AtoC, BtoC], typeA)
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    temp2 = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])
+    temp3 = Calculate_standardizedB(data, PointEstimate3[0])
+    Sa = temp2[0]
+    Sb = temp3[1]
+    SIE = CalculateKappaEffectSize(data, a, b)
+    return a, b, Sa, Sb, IE, SIE
+
     
-def CalculateKappaEffectSize():
+    
+def CalculateKappaEffectSize(data, a, b):
     # https://github.com/NCMlab/ProcessModelsNeuroImage/blob/master/FinalCode/CalculateKappa2.m
-    pass
+    COV = np.cov(data.T)
+
+    # Calculate the permissible values of a
+    perm_a_1 = (COV[2,1] * COV[2,0] + np.sqrt(COV[1,1] * COV[2,2] - COV[2,1]**2) * np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2))/(COV[0,0] * COV[2,2])
+    perm_a_2 = (COV[2,1] * COV[2,0] - np.sqrt(COV[1,1] * COV[2,2] - COV[2,1]**2) * np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2))/(COV[0,0] * COV[2,2])
+    perm_a = np.array([perm_a_1, perm_a_2])
+    # Calculate the permissible values of b
+    perm_b_1 =  np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2)/np.sqrt(COV[0,0] * COV[1,1] - COV[0,1]**2)
+    perm_b_2 = -np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2)/np.sqrt(COV[0,0] * COV[1,1] - COV[0,1]**2)
+    perm_b = np.array([perm_b_1, perm_b_2])
+    # Check the a values and find the one in the same direction as the point estimate of a  
+    if a > 0:
+        temp = perm_a[perm_a > 0]
+        max_a = max(temp)
+    elif a < 0:
+        temp = perm_a[perm_a < 0]
+        max_a = min(temp)
+    else:
+        max_a = 0
+    # Check the b values and find the one in the same direction as the point
+    # estimate of b
+    if b > 0:
+        temp = perm_b[perm_b > 0]
+        max_b = max(temp)
+    elif b < 0:
+        temp = perm_b[perm_b < 0]
+        max_b = min(temp)
+    else:
+        max_b = 0
+    
+    # calculate kappa    
+    perm_ab = max_a*max_b
+    return (a*b)/perm_ab
+    
+
+
 
 def CalculateRegressionEffectSizes():
     pass
@@ -122,6 +173,10 @@ def Calculate_Beta_Sklearn(data):
     # else:
     #     model = lm.fit(data[:,[0]], data[:,-1])
     return model.coef_, model.intercept_
+
+def Calculate_standardizedB(data, beta):
+    return beta*data[:,0:-1].std(0)/data[:,-1].std()
+
 
 def Bootstrap_Sklearn(NBoot, func, data):
     # How big is the data
@@ -172,7 +227,7 @@ def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0
     return data
 
 
-def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC ):
+def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC):
     print("Starting simulations...")
     t = time.time()
     # Prepare a matrix for counting significant findings
@@ -259,8 +314,8 @@ def main():
         OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
         np.savetxt(os.path.join(OutDir, OutFileName), outdata, delimiter = ',')
 
-if __name__ == "__main__":
-    #MakeBatchScripts()
-    main()
+# if __name__ == "__main__":
+#     #MakeBatchScripts()
+#     main()
 
        
