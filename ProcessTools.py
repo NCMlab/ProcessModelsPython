@@ -117,33 +117,33 @@ def CalculateSimulatedEffectSizes(N, AtoB, AtoC, BtoC, typeA):
     SIE = CalculateKappaEffectSize(data, a, b)
     return a, b, Sa, Sb, IE, SIE
 
-def RunEffectSizeSimulations():
+def RunEffectSizeSimulations(BtoC):
     cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','mAct_a','stdAct_a','mAct_b','stdAct_b','m_IE','std_IE','m_K','std_K']
     dfOutAll = pd.DataFrame(columns=cNamesAll)
     N = np.arange(10,11,10)
     typeA = [99,1,2] # cont, unif, dicotomous     
     AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
     AtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
-    BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+    #BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
     Nsim = 1000    
     count = 0
     for i1 in N:
         for i3 in typeA:
             for i8 in AtoB:
                 for i9 in AtoC:
-                    for i10 in BtoC:
-                        cNames = ['a', 'b', 'Sa','Sb','IE','SIE']
-                        dfOut = pd.DataFrame(columns=cNames)
-                        for s in range(Nsim):
-                            li = CalculateSimulatedEffectSizes(i1, i8, i9, i10, i3)
-                            row = pd.Series(li, index = cNames)
-                            dfOut = dfOut.append(row, ignore_index = True)
-                        liAll = [i1, Nsim, i3, i8, i10, dfOut['a'].mean(), dfOut['a'].std(), dfOut['b'].mean(), dfOut['b'].std(), dfOut['IE'].mean(), dfOut['IE'].std(), dfOut['SIE'].mean(), dfOut['SIE'].std()]
-                        row = pd.Series(liAll, index = cNamesAll)
-                        dfOutAll = dfOutAll.append(row, ignore_index = True)
-                        count += 1
-                        print(count)
-    dfOutAll.to_csv('SimulationsOfEffectSize.csv')
+                    #for i10 in BtoC:
+                    cNames = ['a', 'b', 'Sa','Sb','IE','SIE']
+                    dfOut = pd.DataFrame(columns=cNames)
+                    for s in range(Nsim):
+                        li = CalculateSimulatedEffectSizes(i1, i8, i9, BtoC, i3)
+                        row = pd.Series(li, index = cNames)
+                        dfOut = dfOut.append(row, ignore_index = True)
+                    liAll = [i1, Nsim, i3, i8, BtoC, dfOut['a'].mean(), dfOut['a'].std(), dfOut['b'].mean(), dfOut['b'].std(), dfOut['IE'].mean(), dfOut['IE'].std(), dfOut['SIE'].mean(), dfOut['SIE'].std()]
+                    row = pd.Series(liAll, index = cNamesAll)
+                    dfOutAll = dfOutAll.append(row, ignore_index = True)
+                    count += 1
+                    print(count)
+    dfOutAll.to_csv('SimulationsOfEffectSize_%0.1f.csv'%(BtoC))
                         
                         
 def CalculateKappaEffectSize(data, a, b):
@@ -342,9 +342,14 @@ def main():
         OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
         np.savetxt(os.path.join(OutDir, OutFileName), outdata, delimiter = ',')
 
+def main2():
+    index = int(sys.argv[1:][0])
+    BtoCArray = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+    RunEffectSizeSimulations(BtoCArray[index])
+        
 if __name__ == "__main__":
 #     #MakeBatchScripts()
 #     main()
-    RunEffectSizeSimulations()
+    main2()
 
        
