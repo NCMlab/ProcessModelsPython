@@ -143,6 +143,7 @@ def RunEffectSizeSimulations():
                         dfOutAll = dfOutAll.append(row, ignore_index = True)
                         count += 1
                         print(count)
+    dfOutAll.to_csv('SimulationsOfEffectSize.csv')
                         
                         
 def CalculateKappaEffectSize(data, a, b):
