@@ -17,7 +17,7 @@ def MakeBatchScripts():
 
     BaseDir = "/home/steffejr/scratch/Project"
     OutDir = "/home/steffejr/Data"
-    OutDir = '/Users/jasonsteffener/Documents/GitHub'
+    #OutDir = '/Users/jasonsteffener/Documents/GitHub'
     CodeDir = "/home/steffejr/scratch/ProcessModelsPython"
     SubmissionListFileName = os.path.join(OutDir,'SubmissionList.csv')    
     N = np.arange(110,201,10)

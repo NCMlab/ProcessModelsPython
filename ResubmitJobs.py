@@ -11,7 +11,7 @@ import time
 # Where to dind the batch scripts
 BaseDir = "/home/steffejr/scratch/Project/jobs"
 # Where to find the output files
-OutDir = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
+# OutDir = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
 OutDir = '/home/steffejr/Data'
 # WHat is the submission list filename
 fileName = "SubmissionList.csv"
@@ -19,7 +19,7 @@ fileName = "SubmissionList.csv"
 df = pd.read_csv(os.path.join(OutDir, fileName))
 
 CountSubmitted = 0
-SubmitLimit = 10
+SubmitLimit = 700
 ListOfResubmit = []
 for index, row in df.iterrows():
     # Check to see if a row has data
