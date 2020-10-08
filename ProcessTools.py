@@ -112,7 +112,7 @@ def ExploringIdea():
 def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
     # Using provided assigned effects, calculate the estimated effects
     # and the standardied effect sizes
-    data = MakeIndependentData(N, [1,1,1], [0.1,0.1,0.1], [a, b, cP], typeA)
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [a, b, cP], typeA)
     PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
     PointEstimate3 = Calculate_Beta_Sklearn(data)
     # Point estimate mediation effects
@@ -130,12 +130,12 @@ def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
 def RunEffectSizeSimulations(b):
     cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','Exp_cP', 'mAct_a','stdAct_a','mAct_b','stdAct_b', 'mAct_cP','stdAct_cP','m_IE','std_IE', 'm_Sa','std_Sa','m_Sb','std_Sb', 'm_ScP','std_ScP','m_K','std_K']
     dfOutAll = pd.DataFrame(columns=cNamesAll)
-    N = [1000]#np.arange(10,11,10)
+    N = np.arange(10,101,10)
     typeA = [99,1,2] # cont, unif, dicotomous     
     aLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
     cPLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
     #BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
-    Nsim = 10   
+    Nsim = 100   
     count = 0
     
     for i1 in N:
