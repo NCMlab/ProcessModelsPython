@@ -362,9 +362,9 @@ def main2():
     bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
     RunEffectSizeSimulations(bLIST[index])
         
-# if __name__ == "__main__":
+if __name__ == "__main__":
 # #     #MakeBatchScripts()
-# #     main()
+    main()
 #     main2()
 
        
