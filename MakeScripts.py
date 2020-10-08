@@ -23,16 +23,16 @@ def MakeBatchScripts():
     N = np.arange(110,151,10)
     #N = [100]
     typeA = [99,1,2] # cont, unif, dicotomous     
-    AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
-    AtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
-    BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+    aLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    cPLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
     Nboot = 1000
     Nsim = 1000    
     count = 0
     for i1 in N:
         for i3 in typeA:
-            for i8 in AtoB:
-                for i9 in AtoC:
+            for i8 in aLIST:
+                for i9 in cPLIST:
                     #for i10 in BtoC:
                         count += 1
                         if count > -1:

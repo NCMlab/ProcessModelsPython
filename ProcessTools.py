@@ -35,11 +35,13 @@ def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
 
 def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
     # Indirect effect
+    # The model of B with A has one beta which is index 0
     a = PointEstimate2[0][ia]
+    # The model of C with A and B has two betas, b has index = 1
     b = PointEstimate3[0][ib]
     IE = a*b
     # Direct effect
-    DE = PointEstimate3[0][0]
+    DE = PointEstimate3[0][0] # This is cP
     TE = DE + IE
     return IE, TE, DE, a, b
     
@@ -89,9 +91,9 @@ def CalculateBCaCI(BS, JK, PE, alpha):
 def ExploringIdea():  
     # How do the variance in the simulated data, the weights, the betas and the Bs 
     # relate to each other?
-    N = 100
+    N = 1000
     
-    data = MakeIndependentData(N, [1,1,1], [1,1,1], [0.25, 0.25, 0.25], 99)
+    data = MakeIndependentData(N, [1,1,1], [0.001,0.001,0.001], [0.25, -0.25, 0.75], 99)
 
     PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
     PointEstimate3 = Calculate_Beta_Sklearn(data)
@@ -99,13 +101,18 @@ def ExploringIdea():
     IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
     print("a: %0.3f"%(a))
     print("b: %0.3f"%(b))
+    print("cP: %0.3f"%(DE))
+    print("TE: %0.3f"%(TE))
+    print("IE: %0.3f"%(IE))
     print(Calculate_standardizedB(data, PointEstimate3[0]))
     print(CalculateKappaEffectSize(data, a, b))
     
-def CalculateSimulatedEffectSizes(N, AtoB, AtoC, BtoC, typeA):
+    
+    
+def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
     # Using provided assigned effects, calculate the estimated effects
     # and the standardied effect sizes
-    data = MakeIndependentData(N, [1,1,1], [1,1,1], [AtoB, AtoC, BtoC], typeA)
+    data = MakeIndependentData(N, [1,1,1], [0.1,0.1,0.1], [a, b, cP], typeA)
     PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
     PointEstimate3 = Calculate_Beta_Sklearn(data)
     # Point estimate mediation effects
@@ -118,35 +125,45 @@ def CalculateSimulatedEffectSizes(N, AtoB, AtoC, BtoC, typeA):
     ScP = temp4[0]
     cP = DE
     SIE = CalculateKappaEffectSize(data, a, b)
-    return a, b, Sa, Sb, IE, SIE, cP, ScP
+    return a, b, cP, Sa, Sb, ScP, IE, SIE
 
-def RunEffectSizeSimulations(BtoC):
-    cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','Exp_cP', 'mAct_a','stdAct_a','mAct_b','stdAct_b','m_IE','std_IE','m_K','std_K', 'mActcP','stdAct_cP']
+def RunEffectSizeSimulations(b):
+    cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','Exp_cP', 'mAct_a','stdAct_a','mAct_b','stdAct_b', 'mAct_cP','stdAct_cP','m_IE','std_IE', 'm_Sa','std_Sa','m_Sb','std_Sb', 'm_ScP','std_ScP','m_K','std_K']
     dfOutAll = pd.DataFrame(columns=cNamesAll)
-    N = np.arange(10,11,10)
+    N = [1000]#np.arange(10,11,10)
     typeA = [99,1,2] # cont, unif, dicotomous     
-    AtoB = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
-    AtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    aLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    cPLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
     #BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
-    Nsim = 1000    
+    Nsim = 10   
     count = 0
+    
     for i1 in N:
         for i3 in typeA:
-            for i8 in AtoB:
-                for i9 in AtoC:
+            for i8 in aLIST:
+                for i9 in cPLIST:
                     #for i10 in BtoC:
                     cNames = ['a', 'b', 'cP', 'Sa','Sb','ScP','IE','SIE']
                     dfOut = pd.DataFrame(columns=cNames)
                     for s in range(Nsim):
-                        li = CalculateSimulatedEffectSizes(i1, i8, i9, BtoC, i3)
+                        li = CalculateSimulatedEffectSizes(i1, i8, b, i9, i3)
                         row = pd.Series(li, index = cNames)
                         dfOut = dfOut.append(row, ignore_index = True)
-                    liAll = [i1, Nsim, i3, i8, BtoC, dfOut['a'].mean(), dfOut['a'].std(), dfOut['b'].mean(), dfOut['b'].std(), dfOut['IE'].mean(), dfOut['IE'].std(), dfOut['SIE'].mean(), dfOut['SIE'].std()]
+                    liAll = [i1, Nsim, i3, i8, b, i9, dfOut['a'].mean(), dfOut['a'].std(), dfOut['b'].mean(), dfOut['b'].std(), dfOut['cP'].mean(), dfOut['cP'].std(), dfOut['IE'].mean(), dfOut['IE'].std()]
+                    liAll.append(dfOut['Sa'].mean())
+                    liAll.append(dfOut['Sa'].std()) 
+                    liAll.append(dfOut['Sb'].mean()) 
+                    liAll.append(dfOut['Sb'].std()) 
+                    liAll.append(dfOut['ScP'].mean())
+                    liAll.append(dfOut['ScP'].std())
+                    liAll.append(dfOut['SIE'].mean()) 
+                    liAll.append(dfOut['SIE'].std())
+                    
                     row = pd.Series(liAll, index = cNamesAll)
                     dfOutAll = dfOutAll.append(row, ignore_index = True)
                     count += 1
                     print(count)
-    dfOutAll.to_csv('SimulationsOfEffectSize_%0.1f.csv'%(BtoC))
+    dfOutAll.to_csv('SimulationsOfEffectSize_%0.1f.csv'%(b))
                         
                         
 def CalculateKappaEffectSize(data, a, b):
@@ -225,7 +242,8 @@ def Bootstrap_Sklearn(NBoot, func, data):
 
 
 def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0], Atype = 99):
-    # weights = AtoC, BtoC, AtoB
+    # means = A, B, C
+    # weights = a, b, cP
     # Make sure everything is the correct size
     M = len(means)
     S = len(stdev)
@@ -241,24 +259,16 @@ def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0
     if Atype == 2:
         data[:,0] = np.concatenate((np.zeros(int(N/2)), np.ones(int(N/2))))
     # Add weights between predictors to DV
-    AtoB = weights[-1] # This part is super confusing!!!!
-    AtoC = weights[0]
-    BtoC = weights[1]
+
     # Make C data
-    # Make a weighted combo of A and B
-    temp = np.zeros(N)
-    for i in range(M-1):
-        temp = temp + (data[:,i])*weights[i]
-    # Add thsi weighted combo to C
-    data[:,-1] = temp + data[:,-1]
-    # Make B data    
-    data[:,1] = data[:,1] + (data[:,0])*AtoB
-# except:
-#     data = -99
+    # Make weighted combo of A and B
+    data[:,1] = data[:,1] + data[:,0]*weights[0]
+    data[:,2] = data[:,2] + data[:,0]*weights[2] + data[:,1]*weights[1]
+    
     return data
 
 
-def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC):
+def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
     print("Starting simulations...")
     t = time.time()
     # Prepare a matrix for counting significant findings
@@ -267,10 +277,12 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC):
     for i in range(NSimMC):
         print("%d of %d"%(i+1,NSimMC))
         # Make data
-        data = MakeIndependentData(N, [1,1,1], [1,1,1], [AtoB, AtoC, BtoC], typeA)
+        data = MakeIndependentData(N, [1,1,1], [1,1,1], [a, b, cP], typeA)
         # data = MakeMultiVariableData(N,means, covs)
         # Point estimates
+        #  Model of B with A, parameter is a
         PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+        # Model of C with A and B, parameters are cp, b
         PointEstimate3 = Calculate_Beta_Sklearn(data)
         # Point estimate mediation effects
         IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
@@ -304,7 +316,7 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, AtoB, AtoC, BtoC):
     Power = MClist.sum(0)/NSimMC
     # Prepare output data
     # Nboot, Nsim, N, AtoB, AtoC, BtoC, typeA, powIE, powTE, powDE, powa, powb
-    outdata = [NBoot, NSimMC, N, AtoB, AtoC, BtoC, typeA, Power[0], Power[1], Power[2], Power[3], Power[4]]
+    outdata = [NBoot, NSimMC, N, a, cP, b, typeA, Power[0], Power[1], Power[2], Power[3], Power[4]]
     print("Run time was: %0.2f"%(time.time() - t))
     
     return outdata
@@ -324,19 +336,19 @@ def main():
         NSim = int(sys.argv[1:][1])
         N = int(sys.argv[1:][2])
         Atype = int(sys.argv[1:][3])
-        AtoB = float(sys.argv[1:][4])
-        AtoC = float(sys.argv[1:][5])
+        a = float(sys.argv[1:][4])
+        cP = float(sys.argv[1:][5])
         OutDir = sys.argv[1:][6]
-        BtoC = float(sys.argv[1:][7])
-        BtoCArray = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+        b = float(sys.argv[1:][7])
+        bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
         # If this parameter is too big then assume that the sbatch array was used
-        if BtoC > 0.9:
-            BtoC = BtoCArray[int(BtoC)-1]
+        if b > 0.9:
+            b = bLIST[int(b)-1]
             
         
         alpha = 0.05
         print("Calling the simulator")
-        outdata = CalculateIndPower(NBoot,NSim, N, Atype, alpha, AtoB, AtoC, BtoC)
+        outdata = CalculateIndPower(NBoot,NSim, N, Atype, alpha, a, b, cP)
         print("Done with the simulations")
         # Make outputfile name
         clock = time.localtime()
@@ -347,12 +359,12 @@ def main():
 
 def main2():
     index = int(sys.argv[1:][0])
-    BtoCArray = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
-    RunEffectSizeSimulations(BtoCArray[index])
+    bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+    RunEffectSizeSimulations(bLIST[index])
         
-if __name__ == "__main__":
-#     #MakeBatchScripts()
-#     main()
-    main2()
+# if __name__ == "__main__":
+# #     #MakeBatchScripts()
+# #     main()
+#     main2()
 
        
