@@ -38,10 +38,10 @@ for file in files:
         flagNBoot = df['Nboot'] == int(float(li[0]))
         flagNSim = df['NSim'] == int(float(li[1]))
         flagN = df['N'] == int(float(li[2]))
-        flagAtoB = df['AtoB'] == (float(li[3]))
-        flagAtoC = df['AtoC'] == (float(li[4]))
-        flagBtoC = df['AtoC'] == (float(li[5]))
-        flagAtype = df['typeA'] == int(float(li[6]))
+        flagAtoB = df['a'] == (float(li[4]))
+        flagAtoC = df['b'] == (float(li[5]))
+        flagBtoC = df['cP'] == (float(li[6]))
+        flagAtype = df['typeA'] == int(float(li[3]))
         mask = flagNBoot & flagNSim & flagN & flagAtoB & flagAtoC & flagAtype & flagBtoC
         # find the position of this value
         pos = np.flatnonzero(mask)
