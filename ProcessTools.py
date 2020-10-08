@@ -112,13 +112,16 @@ def CalculateSimulatedEffectSizes(N, AtoB, AtoC, BtoC, typeA):
     IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
     temp2 = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])
     temp3 = Calculate_standardizedB(data, PointEstimate3[0])
+    temp4 = Calculate_standardizedB(data, PointEstimate3[1])
     Sa = temp2[0]
     Sb = temp3[1]
+    ScP = temp4[0]
+    cP = DE
     SIE = CalculateKappaEffectSize(data, a, b)
-    return a, b, Sa, Sb, IE, SIE
+    return a, b, Sa, Sb, IE, SIE, cP, ScP
 
 def RunEffectSizeSimulations(BtoC):
-    cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','mAct_a','stdAct_a','mAct_b','stdAct_b','m_IE','std_IE','m_K','std_K']
+    cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','Exp_cP', 'mAct_a','stdAct_a','mAct_b','stdAct_b','m_IE','std_IE','m_K','std_K', 'mActcP','stdAct_cP']
     dfOutAll = pd.DataFrame(columns=cNamesAll)
     N = np.arange(10,11,10)
     typeA = [99,1,2] # cont, unif, dicotomous     
@@ -132,7 +135,7 @@ def RunEffectSizeSimulations(BtoC):
             for i8 in AtoB:
                 for i9 in AtoC:
                     #for i10 in BtoC:
-                    cNames = ['a', 'b', 'Sa','Sb','IE','SIE']
+                    cNames = ['a', 'b', 'cP', 'Sa','Sb','ScP','IE','SIE']
                     dfOut = pd.DataFrame(columns=cNames)
                     for s in range(Nsim):
                         li = CalculateSimulatedEffectSizes(i1, i8, i9, BtoC, i3)
