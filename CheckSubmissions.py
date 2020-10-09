@@ -10,8 +10,8 @@ import pandas as pd
 import os
 import csv
 import numpy as np
-DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
-# DirName = '/home/steffejr/Data'
+# DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
+DirName = '/home/steffejr/Data'
 fileName = "SubmissionList.csv"
 df = pd.read_csv(os.path.join(DirName, fileName))
 
@@ -20,7 +20,6 @@ df = pd.read_csv(os.path.join(DirName, fileName))
 count = 0 
 files = os.listdir(DirName)
 for file in files:
-    print(file)
     # Read the file    
 
     if file.endswith(".csv") and file.startswith('SimData'): 
@@ -38,10 +37,10 @@ for file in files:
         flagNBoot = df['Nboot'] == int(float(li[0]))
         flagNSim = df['NSim'] == int(float(li[1]))
         flagN = df['N'] == int(float(li[2]))
-        flagAtoB = df['a'] == (float(li[4]))
-        flagAtoC = df['b'] == (float(li[5]))
-        flagBtoC = df['cP'] == (float(li[6]))
-        flagAtype = df['typeA'] == int(float(li[3]))
+        flagAtoB = df['a'] == (float(li[3]))
+        flagAtoC = df['b'] == (float(li[4]))
+        flagBtoC = df['cP'] == (float(li[5]))
+        flagAtype = df['typeA'] == int(float(li[6]))
         mask = flagNBoot & flagNSim & flagN & flagAtoB & flagAtoC & flagAtype & flagBtoC
         # find the position of this value
         pos = np.flatnonzero(mask)
