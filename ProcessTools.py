@@ -285,7 +285,7 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
         # Model of C with A and B, parameters are cp, b
         PointEstimate3 = Calculate_Beta_Sklearn(data)
         # Point estimate mediation effects
-        IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+        IE, TE, DE, Act_a, Act_b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
         
         # Bootstrap model 2
         BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
@@ -301,8 +301,8 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
         IECI = CalculateBCaCI(BSIE, JKIE, IE, alpha)
         TECI = CalculateBCaCI(BSTE, JKTE, TE, alpha)
         DECI = CalculateBCaCI(BSDE, JKDE, DE, alpha)
-        aCI = CalculateBCaCI(BSa, JKa, a, alpha)
-        bCI = CalculateBCaCI(BSb, JKb, b, alpha)
+        aCI = CalculateBCaCI(BSa, JKa, Act_a, alpha)
+        bCI = CalculateBCaCI(BSb, JKb, Act_b, alpha)
         if IECI[0]*IECI[1] > 0:
             MClist[i, 0] = 1        
         if TECI[0]*TECI[1] > 0:
@@ -316,7 +316,7 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
     Power = MClist.sum(0)/NSimMC
     # Prepare output data
     # Nboot, Nsim, N, AtoB, AtoC, BtoC, typeA, powIE, powTE, powDE, powa, powb
-    outdata = [NBoot, NSimMC, N, a, cP, b, typeA, Power[0], Power[1], Power[2], Power[3], Power[4]]
+    outdata = [NBoot, NSimMC, N, a, b, cP, typeA, Power[0], Power[1], Power[2], Power[3], Power[4]]
     print("Run time was: %0.2f"%(time.time() - t))
     
     return outdata

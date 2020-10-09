@@ -6,12 +6,12 @@ Created on Thu Oct  1 14:49:44 2020
 @author: jasonsteffener
 """
 import pandas as pd
-import glob
+# import glob
 import os
 import csv
 import numpy as np
 DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
-DirName = '/home/steffejr/Data'
+# DirName = '/home/steffejr/Data'
 fileName = "SubmissionList.csv"
 df = pd.read_csv(os.path.join(DirName, fileName))
 
