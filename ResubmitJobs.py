@@ -38,5 +38,5 @@ for index, row in df.iterrows():
             # submit the batch job
             if CountSubmitted < SubmitLimit:
                 os.system('sbatch %s'%(os.path.join(BaseDir, fileName+".sh")))
-                time.sleep(1)
+                time.sleep(0.5)
                 CountSubmitted += 1
