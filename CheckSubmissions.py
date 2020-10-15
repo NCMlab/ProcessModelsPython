@@ -10,8 +10,8 @@ import pandas as pd
 import os
 import csv
 import numpy as np
-DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
-#DirName = '/home/steffejr/Data'
+#DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
+DirName = '/home/steffejr/Data'
 fileName = "SubmissionList.csv"
 df = pd.read_csv(os.path.join(DirName, fileName))
 
