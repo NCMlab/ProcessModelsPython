@@ -10,8 +10,8 @@ import pandas as pd
 import os
 import csv
 import numpy as np
-# DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
-DirName = '/home/steffejr/Data'
+DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
+#DirName = '/home/steffejr/Data'
 fileName = "SubmissionList.csv"
 df = pd.read_csv(os.path.join(DirName, fileName))
 
@@ -47,6 +47,7 @@ for file in files:
         df['Completed'][pos] = 1
         count += 1
 
+print("Jobs complted: %d, out of %d total jobs"%(count, len(df.index)))
 df.to_csv(os.path.join(DirName, fileName))       
       
         

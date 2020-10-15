@@ -10,6 +10,7 @@ import numpy as np
 # import matplotlib.pyplot as plt
 # import seaborn as sns
 from scipy.stats import norm
+import scipy.stats 
 import time
 import sys
 import os
@@ -68,26 +69,65 @@ def JackKnife(func, data):
         interlist[i] = tempP[1]
     return betalist,interlist
 
-def CalculateBCaCI(BS, JK, PE, alpha):
+def CalculateCI(BS, JK, PE, alpha):
+    # If there were no bias, the zh0 would be zero
+    # If there wer no skew, the acc would be zero
+    # The percentile CI assume bias and skew are zero
+    # The bias-corrected CI assume skew is zero
+    # The bias-correct-accelerated assumes nothing
     NBoot = BS.shape[0]
     N = JK.shape[0]
     zA = norm.ppf(alpha/2)
     z1mA = norm.ppf(1 - alpha/2)
+    # Percentile
+    Alpha1 = norm.cdf(zA)
+    Alpha2 = norm.cdf(z1mA)
+    PCTlower = np.percentile(BS,Alpha1*100)
+    PCTupper = np.percentile(BS,Alpha2*100)
+    PercCI = [PCTlower, PCTupper]
+
     # Find resamples less than point estimate
     F = np.sum(BS < PE)
     BCaCI = [-1, 1]
     if F > 0:
+        # Estimate the bias in the BS
         zh0 = norm.ppf(F/NBoot)
+        # Calculate CI using just the bias correction
+        Alpha1 = norm.cdf(zh0 + (zh0 + zA))
+        Alpha2 = norm.cdf(zh0 + (zh0 + z1mA))
+
+        PCTlower = np.percentile(BS,Alpha1*100)
+        PCTupper = np.percentile(BS,Alpha2*100)
+        BCCI = [PCTlower, PCTupper]
+        # Calculate the skew/acceleration factor
+        # Adjust the confidence limits based on the skewness
         ThetaDiff = JK.sum()/N - JK
         acc = ((ThetaDiff**3).sum())/(6*((ThetaDiff**2).sum())**(3/2))
-        Alpha1= norm.cdf(zh0 + (zh0 + zA)/(1 - acc*(zh0 + zA)))
+        Alpha1 = norm.cdf(zh0 + (zh0 + zA)/(1 - acc*(zh0 + zA)))
         Alpha2 = norm.cdf(zh0 + (zh0 + z1mA)/(1 - acc*(zh0 + z1mA)))
 
         PCTlower = np.percentile(BS,Alpha1*100)
         PCTupper = np.percentile(BS,Alpha2*100)
         BCaCI = [PCTlower, PCTupper]
-    return BCaCI
+    # Record the amount of bias and the amount of skewness in the 
+    # resamples
+    Bias = F/NBoot
+    BSskew = scipy.stats.skew(BS)
+    BSskewStat = scipy.stats.skewtest(BS)[0]
+    return PercCI, BCCI, BCaCI, Bias, BSskew, BSskewStat
 
+
+def CaclulatePercCI(BS, alpha):
+    # count the samples
+    NBoot = BS.shape[0]
+    # sort the resamples
+    sBS = np.sort(BS)
+    # Find the limits
+    Lower = int(np.floor(NBoot*alpha/2))
+    Upper = int(NBoot - np.ceil(NBoot*alpha/2))
+    percCI = [sBS[Lower], sBS[Upper]]
+    return percCI
+    
 def ExploringIdea():  
     # How do the variance in the simulated data, the weights, the betas and the Bs 
     # relate to each other?
@@ -107,6 +147,35 @@ def ExploringIdea():
     print(Calculate_standardizedB(data, PointEstimate3[0]))
     print(CalculateKappaEffectSize(data, a, b))
     
+    N=100
+    NBoot = 1000
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [0.2, 0.2, 0], 1)
+    # data = MakeMultiVariableData(N,means, covs)
+    # Point estimates
+    #  Model of B with A, parameter is a
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    # Model of C with A and B, parameters are cp, b
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, Act_a, Act_b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    
+    # Bootstrap model 2
+    BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+    JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+    # Bootstrap model 3
+    BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+    JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+    # Bootstrap mediation effects
+    BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+    # Jackknifemediation effects
+    JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+    
+    alpha = 0.05
+    [IEPercCI, IEBCCI, IEBCaCI, IEBSskew, IEBSskewStat] = CalculateCI(BSIE, JKIE, IE, alpha)
+    
+ 
+
+    
     
     
 def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
@@ -125,6 +194,7 @@ def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
     ScP = temp4[0]
     cP = DE
     SIE = CalculateKappaEffectSize(data, a, b)
+    return Sa, Sb, ScP, SIE
     return a, b, cP, Sa, Sb, ScP, IE, SIE
 
 def RunEffectSizeSimulations(b):
@@ -272,7 +342,18 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
     print("Starting simulations...")
     t = time.time()
     # Prepare a matrix for counting significant findings
-    MClist = np.zeros((NSimMC,5))
+    PercList = np.zeros((NSimMC,5))
+    BCList = np.zeros((NSimMC,5))
+    BCaList = np.zeros((NSimMC,5))
+    SaList = np.zeros((NSimMC,1))
+    SbList = np.zeros((NSimMC,1))
+    ScPList = np.zeros((NSimMC,1))
+    SIEList  = np.zeros((NSimMC,1))
+    
+    IEBiasList = np.zeros((NSimMC,1))
+    IEBSskewList = np.zeros((NSimMC,1))
+    IEBSskewStatList = np.zeros((NSimMC,1))
+    
     # Repeatedly generate data for Monte Carlo simulations 
     for i in range(NSimMC):
         print("%d of %d"%(i+1,NSimMC))
@@ -298,29 +379,62 @@ def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
         # Jackknifemediation effects
         JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
         
-        IECI = CalculateBCaCI(BSIE, JKIE, IE, alpha)
-        TECI = CalculateBCaCI(BSTE, JKTE, TE, alpha)
-        DECI = CalculateBCaCI(BSDE, JKDE, DE, alpha)
-        aCI = CalculateBCaCI(BSa, JKa, Act_a, alpha)
-        bCI = CalculateBCaCI(BSb, JKb, Act_b, alpha)
-        if IECI[0]*IECI[1] > 0:
-            MClist[i, 0] = 1        
-        if TECI[0]*TECI[1] > 0:
-            MClist[i, 1] = 1        
-        if DECI[0]*DECI[1] > 0:
-            MClist[i, 2] = 1        
-        if aCI[0]*aCI[1] > 0:
-            MClist[i, 3] = 1        
-        if bCI[0]*bCI[1] > 0:
-            MClist[i, 4] = 1   
-    Power = MClist.sum(0)/NSimMC
+        # Calculate confidence intervals for all effects in the model
+        IEPercCI, IEBCCI, IEBCaCI, IEBiasList[i], IEBSskewList[i], IEBSskewStatList[i] = CalculateCI(BSIE, JKIE, IE, alpha)
+        TEPercCI, TEBCCI, TEBCaCI, TEBias, TEBSskew, TEBSskewStat = CalculateCI(BSTE, JKTE, TE, alpha)
+        DEPercCI, DEBCCI, DEBCaCI, DEBias, DEBSskew, DEBSskewStat = CalculateCI(BSDE, JKDE, DE, alpha)
+        aPercCI, aBCCI, aBCaCI, aBias, aBSskew, aBSskewStat = CalculateCI(BSa, JKa, Act_a, alpha)
+        bPercCI, bBCCI, bBCaCI, bBias, bBSskew, bBSskewStat = CalculateCI(BSb, JKb, Act_b, alpha)
+        # Make boolean list of whether the confidence intervals include zero        
+        PercList[i,:] = DoCIIncludeZero(IEPercCI,TEPercCI, DEPercCI, aPercCI, bPercCI)
+        BCList[i,:] = DoCIIncludeZero(IEBCCI,TEBCCI, DEBCCI, aBCCI, bBCCI)
+        BCaList[i,:] = DoCIIncludeZero(IEBCaCI,TEBCaCI, DEBCaCI, aBCaCI, bBCaCI)
+        # Calculate the effect size for each simulation
+        SaList[i] = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])[0]
+        [ScPList[i],SbList[i]]  = Calculate_standardizedB(data, PointEstimate3[0])
+        SIEList[i] = CalculateKappaEffectSize(data, PointEstimate2[0], PointEstimate3[1])[0]
+    # Now that simulations have been done, how many simulations
+    # resulted in significant results
+    PercPower = PercList.sum(0)/NSimMC
+    BCPower = BCList.sum(0)/NSimMC
+    BCaPower = BCaList.sum(0)/NSimMC
+ 
     # Prepare output data
-    # Nboot, Nsim, N, AtoB, AtoC, BtoC, typeA, powIE, powTE, powDE, powa, powb
-    outdata = [NBoot, NSimMC, N, a, b, cP, typeA, Power[0], Power[1], Power[2], Power[3], Power[4]]
-    print("Run time was: %0.2f"%(time.time() - t))
+    # Add parameters
+    outdata = [NBoot, NSimMC, N, a, b, cP, typeA]
+    # Add the power estimates from the difference approaches    
+    outdata.extend(PercPower)
+    outdata.extend(BCPower)
+    outdata.extend(BCaPower)
+    # Add mean and std of effect sizes
+    EffectSizeList = [SaList.mean(), SaList.std(), SbList.mean(), SbList.std(), ScPList.mean(), ScPList.std(), SIEList.mean(), SIEList.std()]
+    outdata.extend(EffectSizeList)
+   # What are the skew and bias estimates
+    BiasSkewList = [IEBiasList.mean(), IEBiasList.std(), IEBSskewList.mean(), IEBSskewList.std(), IEBSskewStatList.mean(), IEBSskewStatList.std()]
+    outdata.extend(BiasSkewList)
     
+        
+
+    print("Run time was: %0.2f"%(time.time() - t))
+    # For each run the following should be calculated also
+    # standardized parameters
+    # skewnPess in the BS resmple
+    # statistical test of whether the skewness is large
+    # confidence intervals using 
+    # percentile
+    # BCa
     return outdata
 
+
+
+def PrintPowerSimResult(outdata):
+    print("Power for IE with Perc: %0.3f"%(outdata[7]))
+    print("Power for IE with BC: %0.3f"%(outdata[12]))
+    print("Power for IE with BCa: %0.3f"%(outdata[17]))    
+    
+    
+def DoCIIncludeZero(IE, TE, DE, a, b):
+    return int(np.prod(IE)>0), int(np.prod(TE)>0), int(np.prod(DE)>0), int(np.prod(a)>0), int(np.prod(b)>0)
 
 def main():
     if len(sys.argv[1:]) != 8:
