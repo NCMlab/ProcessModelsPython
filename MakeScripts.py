@@ -20,12 +20,12 @@ def MakeBatchScripts():
     #OutDir = '/Users/jasonsteffener/Documents/GitHub'
     CodeDir = "/home/steffejr/scratch/ProcessModelsPython"
     SubmissionListFileName = os.path.join(OutDir,'SubmissionList.csv')    
-    N = np.arange(110,201,10)
+    N = np.arange(10,201,10)
     #N = [100]
     typeA = [99,1,2] # cont, unif, dicotomous     
-    aLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
-    cPLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
-    bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+    aLIST = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]#np.arange(-0.5,0.1,0.5)
+    cPLIST = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]# np.arange(-1.0,1.01,0.5)
+    bLIST = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]# np.arange(-1.0,1.01,0.5)    
     Nboot = 1000
     Nsim = 1000    
     count = 0
@@ -48,7 +48,7 @@ def MakeBatchScripts():
                             f.write("#SBATCH --account=def-steffejr-ab\n")
                             f.write("#SBATCH --mem-per-cpu=512M\n\n")
                             # Added an array for at least one dimension of simulations
-                            f.write("#SBATCH --array=1-9\n")
+                            f.write("#SBATCH --array=1-11\n")
                             f.write("source ~/ENV/bin/activate\n")
                             f.write("python %s %d %d %d %d %0.2f %0.2f %s %s\n" %(os.path.join(CodeDir, "ProcessTools.py"), Nboot,Nsim,i1,i3, i8,i9, OutDir, '$SLURM_ARRAY_TASK_ID'))
                             f.close()
