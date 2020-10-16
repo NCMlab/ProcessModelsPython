@@ -12,7 +12,7 @@ import time
 BaseDir = "/home/steffejr/scratch/Project/jobs"
 # Where to find the output files
 # OutDir = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
-OutDir = '/home/steffejr/Data'
+OutDir = '/home/steffejr/Data/Results'
 # WHat is the submission list filename
 fileName = "SubmissionList.csv"
 # read the file
