@@ -13,7 +13,7 @@ import numpy as np
 #DirName = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
 DirName = '/home/steffejr/Data'
 fileName = "SubmissionList.csv"
-df = pd.read_csv(os.path.join(DirName, fileName))
+df = pd.read_csv(os.path.join(DirName,'Results', fileName))
 
 # Cycle over the list of result files and check to see if they are found
 
