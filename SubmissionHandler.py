@@ -25,6 +25,7 @@ def main():
         
         # Check the queue
         if CheckOnQueue():
+            print("The queue is empty")
             EmptyQueueFlag = True
             # If the queue is empty, CheckSubmissions
             [JobsCompleted, JobsToDo] = CheckSubmissions(PathToResultFiles, fileName)
@@ -34,8 +35,10 @@ def main():
                 print("ALL DONE!!!")
                 # All done
             else:
+                print("Submitting jobs")
                 ResubmitJobs(PathToJobFiles, fileName)
         else:
+            print("The queue is not empty")
             EmptyQueueFlag = False
         # Wait one hour before checking again
         t = time.localtime()
