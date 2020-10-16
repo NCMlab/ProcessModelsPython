@@ -123,3 +123,6 @@ def ResubmitJobs(PathToJobFiles, PathToResultFiles, fileName):
                     os.system('sbatch %s'%(os.path.join(PathToJobFiles, fileName+".sh")))
                     time.sleep(0.5)
                     CountSubmitted += 1
+
+if __name__ == "__main__":
+    main()
