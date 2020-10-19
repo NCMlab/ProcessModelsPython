@@ -36,7 +36,7 @@ def main():
                 # All done
             else:
                 print("Submitting jobs")
-                ResubmitJobs(PathToJobFiles, fileName)
+                ResubmitJobs(PathToJobFiles, PathToResultFiles, fileName)
         else:
             print("The queue is not empty")
             EmptyQueueFlag = False
@@ -53,7 +53,7 @@ def CheckOnQueue():
     # Check on the queue and return if the queue is empty
     P = os.popen('sq | wc').read()
     JobsInQueue = int(P.split()[0])  
-    return JobsInQueue == 0
+    return JobsInQueue == 1
 
     
 def CheckSubmissions(PathToResultFiles, fileName):
@@ -126,3 +126,6 @@ def ResubmitJobs(PathToJobFiles, PathToResultFiles, fileName):
                     os.system('sbatch %s'%(os.path.join(PathToJobFiles, fileName+".sh")))
                     time.sleep(0.5)
                     CountSubmitted += 1
+
+if __name__ == "__main__":
+    main()
