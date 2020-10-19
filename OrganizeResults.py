@@ -12,28 +12,17 @@ import csv
 import pandas as pd
 
 def main():
-#DataFolder = "/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython"
+    #DataFolder = "/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython"
     DataFolder = "/home/steffejr/Data"
 
 
-
-
-# How many result files are there?
-
-    cNames = ['Nboot','NSim','N','AtoB', 'AtoC', 'BtoC', 'typeA','powIE', 'powTE', 'powDE', 'powa', 'powb']
+    cNames = ['NBoot', 'NSimMC', 'N', 'a', 'b', 'cP', 'typeA','PercPow','BCPow','BCaPow']
+    cNames.extend(['SaMean', 'SaStd', 'SbMean', 'SbStd', 'ScPMean', 'ScPStd', 'SIEMean', 'SIEStd'])
+    cNames.extend(['IEBiasMean', 'IEBiasStd', 'IEBSskewMean', 'IEBSskewStd', 'IEBSskewStatMean', 'IEBSskewStatStd'])
+    # How many result files are there?
     df = pd.DataFrame(columns=cNames)
     count = 0
-
-
-
-
-
-# Load each file
-# Organize it
-
-
-# Create a dataframe
-# Read the data
+    # Read the data
     count = 0
     for filename in os.listdir(DataFolder):
         # if filename.endswith(".csv"): 
