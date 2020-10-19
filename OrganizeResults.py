@@ -16,7 +16,12 @@ def main():
     DataFolder = "/home/steffejr/Data"
 
 
-    cNames = ['NBoot', 'NSimMC', 'N', 'a', 'b', 'cP', 'typeA','PercPow','BCPow','BCaPow']
+    cNames = ['NBoot', 'NSimMC', 'N', 'a', 'b', 'cP', 'typeA']
+    
+    cNames.extend(['IEPercPow','TEPercPow', 'DEPercPow', 'aPercPow', 'bPercPow'])
+    cNames.extend(['IEBCPow','TEBCPow', 'DEBCPow', 'aBCPow', 'bBCPow'])
+    cNames.extend(['IEBCaPow','TEBCaPow', 'DEBCaPow', 'aBCaPow', 'bBCaPow'])
+    
     cNames.extend(['SaMean', 'SaStd', 'SbMean', 'SbStd', 'ScPMean', 'ScPStd', 'SIEMean', 'SIEStd'])
     cNames.extend(['IEBiasMean', 'IEBiasStd', 'IEBSskewMean', 'IEBSskewStd', 'IEBSskewStatMean', 'IEBSskewStatStd'])
     # How many result files are there?
