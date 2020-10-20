@@ -1,14 +1,7 @@
-# from scipy import stats
-# from astropy.stats import jackknife_resampling
-# from astropy.stats import jackknife_stats
-# import math
-# import scipy.linalg as la
+
 from sklearn import linear_model
 from sklearn.utils import resample
 import numpy as np
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import seaborn as sns
 from scipy.stats import norm
 import scipy.stats 
 import time
@@ -17,6 +10,27 @@ import os
 import pandas as pd
 
 def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
+    """Summary line.
+
+    Extended description of function.
+
+    Parameters
+    ----------
+    arg1 : int
+        Description of arg1
+    arg2 : str
+        Description of arg2
+
+    Returns
+    -------
+    bool
+        Description of return value
+
+    Examples
+    --------
+    >>> func(1, "a")
+    True
+    """
     # How big is the data
     N,M = data.shape
     # Remove mean of each column
@@ -437,6 +451,7 @@ def DoCIIncludeZero(IE, TE, DE, a, b):
     return int(np.prod(IE)>0), int(np.prod(TE)>0), int(np.prod(DE)>0), int(np.prod(a)>0), int(np.prod(b)>0)
 
 def main():
+    #   make sure this script and make submussions match
     if len(sys.argv[1:]) != 8:
         print("ERROR")
     else:
@@ -454,7 +469,7 @@ def main():
         cP = float(sys.argv[1:][5])
         OutDir = sys.argv[1:][6]
         b = float(sys.argv[1:][7])
-        bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+        bLIST = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]
         # If this parameter is too big then assume that the sbatch array was used
         if b > 0.9:
             b = bLIST[int(b)-1]

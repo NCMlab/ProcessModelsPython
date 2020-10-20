@@ -5,11 +5,26 @@ Created on Wed Sep 30 10:42:38 2020
 
 Load up all result files and organize them
 
+Something like this will make it all a lot faster
+
+with open("temp/merged_pure_python2.csv","wb") as fout:
+    # first file:
+    with open("temp/in/1.csv", "rb") as f:
+        fout.write(f.read())
+    # now the rest:    
+    for num in range(2,101):
+        with open("temp/in/"+str(num)+".csv", "rb") as f:
+            next(f) # skip the header
+            fout.write(f.read())
+            
+            
 @author: jasonsteffener
 """
 import os
 import csv
 import pandas as pd
+
+
 
 def main():
     #DataFolder = "/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython"
