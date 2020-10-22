@@ -49,6 +49,41 @@ def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
     return OutData
 
 def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
+    """Calculate derived effects from simple mediation model.
+    
+    Given parameter estimates from a simple mediation model,
+    calculate the indirect effect, the total effect and the indirect effects
+    
+
+    Parameters
+    ----------
+    PointEstimate2 : array
+        This is an array of parameter estimates for the regression equation
+        of A on B. With no covariates, this will be an array of length 1
+    PointEstimate3 : array
+        This is an array of parameter estimates for the regression equation
+        of A and B on C. With no covariates, this will be an array of length 2
+    ia : int 
+        The index of the parameter of interest from the array of beta values
+        in PointEstimate2
+    ib : int
+        The index of the parameter of interest from the array of beta values
+        in PointEstimate3
+
+    Returns
+    -------
+    IE
+        The indirect effect, parameter a times b
+    TE
+        The total effect
+    DE
+        The direct effect, the effect of A on C, when B is in the model
+    a
+        The effect of A on B
+    b
+        The effect of B on C, when A is in the model
+
+    """
     # Indirect effect
     # The model of B with A has one beta which is index 0
     a = PointEstimate2[0][ia]

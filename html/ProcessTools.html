@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.1" />
+<title>ProcessTools API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ProcessTools</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from sklearn import linear_model
+from sklearn.utils import resample
+import numpy as np
+from scipy.stats import norm
+import scipy.stats 
+import time
+import sys
+import os
+import pandas as pd
+
+def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
+    &#34;&#34;&#34;Summary line.
+
+    Extended description of function.
+
+    Parameters
+    ----------
+    arg1 : int
+        Description of arg1
+    arg2 : str
+        Description of arg2
+
+    Returns
+    -------
+    bool
+        Description of return value
+
+    Examples
+    --------
+    &gt;&gt;&gt; func(1, &#34;a&#34;)
+    True
+    &#34;&#34;&#34;
+    # How big is the data
+    N,M = data.shape
+    # Remove mean of each column
+    iD = data[:,i] - data[:,i].mean()
+    print(iD.mean())
+    jD = data[:,j] - data[:,j].mean()
+    print(jD.mean())
+    # Create the moderation regressor. 
+    # This regressor is a vector and is converted to an array for the multiplication
+    mD = np.array(iD*jD)
+    print(mD.mean())
+    # Add a moderator effect to the DV
+    OutData = np.append(data, np.expand_dims(mD, axis = 1), axis = 1)
+    OutData[:,-1] = OutData[:,-1] + mD*effect
+    # Append the moderator to the data 
+    return OutData
+
+def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
+    &#34;&#34;&#34;Calculate derived effects from simple mediation model.
+    
+    Given parameter estimates from a simple mediation model,
+    calculate the indirect effect, the total effect and the indirect effects
+    
+
+    Parameters
+    ----------
+    PointEstimate2 : array
+        This is an array of parameter estimates for the regression equation
+        of A on B. With no covariates, this will be an array of length 1
+    PointEstimate3 : array
+        This is an array of parameter estimates for the regression equation
+        of A and B on C. With no covariates, this will be an array of length 2
+    ia : int 
+        The index of the parameter of interest from the array of beta values
+        in PointEstimate2
+    ib : int
+        The index of the parameter of interest from the array of beta values
+        in PointEstimate3
+
+    Returns
+    -------
+    IE
+        The indirect effect, parameter a times b
+    TE
+        The total effect
+    DE
+        The direct effect, the effect of A on C, when B is in the model
+    a
+        The effect of A on B
+    b
+        The effect of B on C, when A is in the model
+
+    &#34;&#34;&#34;
+    # Indirect effect
+    # The model of B with A has one beta which is index 0
+    a = PointEstimate2[0][ia]
+    # The model of C with A and B has two betas, b has index = 1
+    b = PointEstimate3[0][ib]
+    IE = a*b
+    # Direct effect
+    DE = PointEstimate3[0][0] # This is cP
+    TE = DE + IE
+    return IE, TE, DE, a, b
+    
+def CalculateMediationResampleEffect(BSbetalist2, BSbetalist3, ia = 0, ib = 1):
+    # Indirect effect
+    a = np.squeeze(BSbetalist2[:,ia])
+    b = np.squeeze(BSbetalist3[:,ib])
+    IE = a*b
+    DE = np.squeeze(BSbetalist3[:,0])
+    TE = DE + IE
+    return IE, TE, DE, a, b
+    
+def JackKnife(func, data):
+    N,M = data.shape
+    # prepare output arrays
+    betalist = np.zeros([N,M-1])
+    interlist = np.zeros([N,1])
+    temp = np.arange(N)
+    for i in range(0,N):
+        JKresample = data[np.delete(temp, i),:]
+        # randomly resample the dataset with the original set with replacement
+        tempP = func(JKresample)
+        betalist[i,:] = tempP[0]
+        interlist[i] = tempP[1]
+    return betalist,interlist
+
+def CalculateCI(BS, JK, PE, alpha):
+    # If there were no bias, the zh0 would be zero
+    # If there wer no skew, the acc would be zero
+    # The percentile CI assume bias and skew are zero
+    # The bias-corrected CI assume skew is zero
+    # The bias-correct-accelerated assumes nothing
+    NBoot = BS.shape[0]
+    N = JK.shape[0]
+    zA = norm.ppf(alpha/2)
+    z1mA = norm.ppf(1 - alpha/2)
+    # Percentile
+    Alpha1 = norm.cdf(zA)
+    Alpha2 = norm.cdf(z1mA)
+    PCTlower = np.percentile(BS,Alpha1*100)
+    PCTupper = np.percentile(BS,Alpha2*100)
+    PercCI = [PCTlower, PCTupper]
+
+    # Find resamples less than point estimate
+    F = np.sum(BS &lt; PE)
+    BCaCI = [-1, 1]
+    if F &gt; 0:
+        # Estimate the bias in the BS
+        zh0 = norm.ppf(F/NBoot)
+        # Calculate CI using just the bias correction
+        Alpha1 = norm.cdf(zh0 + (zh0 + zA))
+        Alpha2 = norm.cdf(zh0 + (zh0 + z1mA))
+
+        PCTlower = np.percentile(BS,Alpha1*100)
+        PCTupper = np.percentile(BS,Alpha2*100)
+        BCCI = [PCTlower, PCTupper]
+        # Calculate the skew/acceleration factor
+        # Adjust the confidence limits based on the skewness
+        ThetaDiff = JK.sum()/N - JK
+        acc = ((ThetaDiff**3).sum())/(6*((ThetaDiff**2).sum())**(3/2))
+        Alpha1 = norm.cdf(zh0 + (zh0 + zA)/(1 - acc*(zh0 + zA)))
+        Alpha2 = norm.cdf(zh0 + (zh0 + z1mA)/(1 - acc*(zh0 + z1mA)))
+
+        PCTlower = np.percentile(BS,Alpha1*100)
+        PCTupper = np.percentile(BS,Alpha2*100)
+        BCaCI = [PCTlower, PCTupper]
+    # Record the amount of bias and the amount of skewness in the 
+    # resamples
+    Bias = F/NBoot
+    BSskew = scipy.stats.skew(BS)
+    BSskewStat = scipy.stats.skewtest(BS)[0]
+    return PercCI, BCCI, BCaCI, Bias, BSskew, BSskewStat
+
+
+def CaclulatePercCI(BS, alpha):
+    # count the samples
+    NBoot = BS.shape[0]
+    # sort the resamples
+    sBS = np.sort(BS)
+    # Find the limits
+    Lower = int(np.floor(NBoot*alpha/2))
+    Upper = int(NBoot - np.ceil(NBoot*alpha/2))
+    percCI = [sBS[Lower], sBS[Upper]]
+    return percCI
+    
+def ExploringIdea():  
+    # How do the variance in the simulated data, the weights, the betas and the Bs 
+    # relate to each other?
+    N = 1000
+    
+    data = MakeIndependentData(N, [1,1,1], [0.001,0.001,0.001], [0.25, -0.25, 0.75], 99)
+
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+        # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    print(&#34;a: %0.3f&#34;%(a))
+    print(&#34;b: %0.3f&#34;%(b))
+    print(&#34;cP: %0.3f&#34;%(DE))
+    print(&#34;TE: %0.3f&#34;%(TE))
+    print(&#34;IE: %0.3f&#34;%(IE))
+    print(Calculate_standardizedB(data, PointEstimate3[0]))
+    print(CalculateKappaEffectSize(data, a, b))
+    
+    N=100
+    NBoot = 1000
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [0.2, 0.2, 0], 1)
+    # data = MakeMultiVariableData(N,means, covs)
+    # Point estimates
+    #  Model of B with A, parameter is a
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    # Model of C with A and B, parameters are cp, b
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, Act_a, Act_b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    
+    # Bootstrap model 2
+    BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+    JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+    # Bootstrap model 3
+    BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+    JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+    # Bootstrap mediation effects
+    BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+    # Jackknifemediation effects
+    JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+    
+    alpha = 0.05
+    [IEPercCI, IEBCCI, IEBCaCI, IEBSskew, IEBSskewStat] = CalculateCI(BSIE, JKIE, IE, alpha)
+    
+ 
+
+    
+    
+    
+def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
+    # Using provided assigned effects, calculate the estimated effects
+    # and the standardied effect sizes
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [a, b, cP], typeA)
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    temp2 = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])
+    temp3 = Calculate_standardizedB(data, PointEstimate3[0])
+    temp4 = Calculate_standardizedB(data, PointEstimate3[1])
+    Sa = temp2[0]
+    Sb = temp3[1]
+    ScP = temp4[0]
+    cP = DE
+    SIE = CalculateKappaEffectSize(data, a, b)
+    return Sa, Sb, ScP, SIE
+    return a, b, cP, Sa, Sb, ScP, IE, SIE
+
+def RunEffectSizeSimulations(b):
+    cNamesAll = [&#39;N&#39;,&#39;NSim&#39;,&#39;typeA&#39;,&#39;Exp_a&#39;,&#39;Exp_b&#39;,&#39;Exp_cP&#39;, &#39;mAct_a&#39;,&#39;stdAct_a&#39;,&#39;mAct_b&#39;,&#39;stdAct_b&#39;, &#39;mAct_cP&#39;,&#39;stdAct_cP&#39;,&#39;m_IE&#39;,&#39;std_IE&#39;, &#39;m_Sa&#39;,&#39;std_Sa&#39;,&#39;m_Sb&#39;,&#39;std_Sb&#39;, &#39;m_ScP&#39;,&#39;std_ScP&#39;,&#39;m_K&#39;,&#39;std_K&#39;]
+    dfOutAll = pd.DataFrame(columns=cNamesAll)
+    N = np.arange(10,101,10)
+    typeA = [99,1,2] # cont, unif, dicotomous     
+    aLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    cPLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    #BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+    Nsim = 100   
+    count = 0
+    
+    for i1 in N:
+        for i3 in typeA:
+            for i8 in aLIST:
+                for i9 in cPLIST:
+                    #for i10 in BtoC:
+                    cNames = [&#39;a&#39;, &#39;b&#39;, &#39;cP&#39;, &#39;Sa&#39;,&#39;Sb&#39;,&#39;ScP&#39;,&#39;IE&#39;,&#39;SIE&#39;]
+                    dfOut = pd.DataFrame(columns=cNames)
+                    for s in range(Nsim):
+                        li = CalculateSimulatedEffectSizes(i1, i8, b, i9, i3)
+                        row = pd.Series(li, index = cNames)
+                        dfOut = dfOut.append(row, ignore_index = True)
+                    liAll = [i1, Nsim, i3, i8, b, i9, dfOut[&#39;a&#39;].mean(), dfOut[&#39;a&#39;].std(), dfOut[&#39;b&#39;].mean(), dfOut[&#39;b&#39;].std(), dfOut[&#39;cP&#39;].mean(), dfOut[&#39;cP&#39;].std(), dfOut[&#39;IE&#39;].mean(), dfOut[&#39;IE&#39;].std()]
+                    liAll.append(dfOut[&#39;Sa&#39;].mean())
+                    liAll.append(dfOut[&#39;Sa&#39;].std()) 
+                    liAll.append(dfOut[&#39;Sb&#39;].mean()) 
+                    liAll.append(dfOut[&#39;Sb&#39;].std()) 
+                    liAll.append(dfOut[&#39;ScP&#39;].mean())
+                    liAll.append(dfOut[&#39;ScP&#39;].std())
+                    liAll.append(dfOut[&#39;SIE&#39;].mean()) 
+                    liAll.append(dfOut[&#39;SIE&#39;].std())
+                    
+                    row = pd.Series(liAll, index = cNamesAll)
+                    dfOutAll = dfOutAll.append(row, ignore_index = True)
+                    count += 1
+                    print(count)
+    dfOutAll.to_csv(&#39;SimulationsOfEffectSize_%0.1f.csv&#39;%(b))
+                        
+                        
+def CalculateKappaEffectSize(data, a, b):
+    # https://github.com/NCMlab/ProcessModelsNeuroImage/blob/master/FinalCode/CalculateKappa2.m
+    COV = np.cov(data.T)
+
+    # Calculate the permissible values of a
+    perm_a_1 = (COV[2,1] * COV[2,0] + np.sqrt(COV[1,1] * COV[2,2] - COV[2,1]**2) * np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2))/(COV[0,0] * COV[2,2])
+    perm_a_2 = (COV[2,1] * COV[2,0] - np.sqrt(COV[1,1] * COV[2,2] - COV[2,1]**2) * np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2))/(COV[0,0] * COV[2,2])
+    perm_a = np.array([perm_a_1, perm_a_2])
+    # Calculate the permissible values of b
+    perm_b_1 =  np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2)/np.sqrt(COV[0,0] * COV[1,1] - COV[0,1]**2)
+    perm_b_2 = -np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2)/np.sqrt(COV[0,0] * COV[1,1] - COV[0,1]**2)
+    perm_b = np.array([perm_b_1, perm_b_2])
+    # Check the a values and find the one in the same direction as the point estimate of a  
+    if a &gt; 0:
+        temp = perm_a[perm_a &gt; 0]
+        max_a = max(temp)
+    elif a &lt; 0:
+        temp = perm_a[perm_a &lt; 0]
+        max_a = min(temp)
+    else:
+        max_a = 0
+    # Check the b values and find the one in the same direction as the point
+    # estimate of b
+    if b &gt; 0:
+        temp = perm_b[perm_b &gt; 0]
+        max_b = max(temp)
+    elif b &lt; 0:
+        temp = perm_b[perm_b &lt; 0]
+        max_b = min(temp)
+    else:
+        max_b = 0
+    
+    # calculate kappa    
+    perm_ab = max_a*max_b
+    return (a*b)/perm_ab
+    
+
+
+
+def CalculateRegressionEffectSizes():
+    pass
+    
+
+
+
+def Calculate_Beta_Sklearn(data):
+    # using linear regression model from sklearn 
+    lm = linear_model.LinearRegression()
+    # M = data.shape[1]
+    #fit the x,y to the model,x will be a 2d matrix and y is a array
+    # if M &gt; 2:
+    model = lm.fit(data[:,0:-1], data[:,-1])
+    # else:
+    #     model = lm.fit(data[:,[0]], data[:,-1])
+    return model.coef_, model.intercept_
+
+def Calculate_standardizedB(data, beta):
+    return beta*data[:,0:-1].std(0)/data[:,-1].std()
+
+
+def Bootstrap_Sklearn(NBoot, func, data):
+    # How big is the data
+    N,M = data.shape
+    # prepare output arrays
+    betalist = np.zeros([NBoot,M-1])
+    interlist = np.zeros([NBoot,1])
+    for i in range(0,NBoot):
+        # randomly resample the dataset with the original set with replacement
+        a = resample(data, n_samples=N, replace=True, random_state=i)
+        temp = func(a)
+        betalist[i,:] = temp[0]
+        interlist[i] = temp[1]
+    return betalist,interlist
+
+
+def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0], Atype = 99):
+    # means = A, B, C
+    # weights = a, b, cP
+    # Make sure everything is the correct size
+    M = len(means)
+    S = len(stdev)
+    W = len(weights)
+# try:
+    data = np.zeros([N,M])
+    # Create independent data
+    # columns are A, B, C
+    for i in range(M):
+        data[:,i] = np.random.normal(means[i], stdev[i], N)
+    if Atype == 1:
+        data[:,0] = np.random.uniform(20,80,N)
+    if Atype == 2:
+        data[:,0] = np.concatenate((np.zeros(int(N/2)), np.ones(int(N/2))))
+    # Add weights between predictors to DV
+
+    # Make C data
+    # Make weighted combo of A and B
+    data[:,1] = data[:,1] + data[:,0]*weights[0]
+    data[:,2] = data[:,2] + data[:,0]*weights[2] + data[:,1]*weights[1]
+    
+    return data
+
+
+def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
+    print(&#34;Starting simulations...&#34;)
+    t = time.time()
+    # Prepare a matrix for counting significant findings
+    PercList = np.zeros((NSimMC,5))
+    BCList = np.zeros((NSimMC,5))
+    BCaList = np.zeros((NSimMC,5))
+    SaList = np.zeros((NSimMC,1))
+    SbList = np.zeros((NSimMC,1))
+    ScPList = np.zeros((NSimMC,1))
+    SIEList  = np.zeros((NSimMC,1))
+    
+    IEBiasList = np.zeros((NSimMC,1))
+    IEBSskewList = np.zeros((NSimMC,1))
+    IEBSskewStatList = np.zeros((NSimMC,1))
+    
+    # Repeatedly generate data for Monte Carlo simulations 
+    for i in range(NSimMC):
+        print(&#34;%d of %d&#34;%(i+1,NSimMC))
+        # Make data
+        data = MakeIndependentData(N, [1,1,1], [1,1,1], [a, b, cP], typeA)
+        # data = MakeMultiVariableData(N,means, covs)
+        # Point estimates
+        #  Model of B with A, parameter is a
+        PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+        # Model of C with A and B, parameters are cp, b
+        PointEstimate3 = Calculate_Beta_Sklearn(data)
+        # Point estimate mediation effects
+        IE, TE, DE, Act_a, Act_b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+        
+        # Bootstrap model 2
+        BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+        JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+        # Bootstrap model 3
+        BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+        JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+        # Bootstrap mediation effects
+        BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+        # Jackknifemediation effects
+        JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+        
+        # Calculate confidence intervals for all effects in the model
+        IEPercCI, IEBCCI, IEBCaCI, IEBiasList[i], IEBSskewList[i], IEBSskewStatList[i] = CalculateCI(BSIE, JKIE, IE, alpha)
+        TEPercCI, TEBCCI, TEBCaCI, TEBias, TEBSskew, TEBSskewStat = CalculateCI(BSTE, JKTE, TE, alpha)
+        DEPercCI, DEBCCI, DEBCaCI, DEBias, DEBSskew, DEBSskewStat = CalculateCI(BSDE, JKDE, DE, alpha)
+        aPercCI, aBCCI, aBCaCI, aBias, aBSskew, aBSskewStat = CalculateCI(BSa, JKa, Act_a, alpha)
+        bPercCI, bBCCI, bBCaCI, bBias, bBSskew, bBSskewStat = CalculateCI(BSb, JKb, Act_b, alpha)
+        # Make boolean list of whether the confidence intervals include zero        
+        PercList[i,:] = DoCIIncludeZero(IEPercCI,TEPercCI, DEPercCI, aPercCI, bPercCI)
+        BCList[i,:] = DoCIIncludeZero(IEBCCI,TEBCCI, DEBCCI, aBCCI, bBCCI)
+        BCaList[i,:] = DoCIIncludeZero(IEBCaCI,TEBCaCI, DEBCaCI, aBCaCI, bBCaCI)
+        # Calculate the effect size for each simulation
+        SaList[i] = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])[0]
+        [ScPList[i],SbList[i]]  = Calculate_standardizedB(data, PointEstimate3[0])
+        SIEList[i] = CalculateKappaEffectSize(data, PointEstimate2[0], PointEstimate3[1])[0]
+    # Now that simulations have been done, how many simulations
+    # resulted in significant results
+    PercPower = PercList.sum(0)/NSimMC
+    BCPower = BCList.sum(0)/NSimMC
+    BCaPower = BCaList.sum(0)/NSimMC
+ 
+    # Prepare output data
+    # Add parameters
+    outdata = [NBoot, NSimMC, N, a, b, cP, typeA]
+    # Add the power estimates from the difference approaches    
+    outdata.extend(PercPower)
+    outdata.extend(BCPower)
+    outdata.extend(BCaPower)
+    # Add mean and std of effect sizes
+    EffectSizeList = [SaList.mean(), SaList.std(), SbList.mean(), SbList.std(), ScPList.mean(), ScPList.std(), SIEList.mean(), SIEList.std()]
+    outdata.extend(EffectSizeList)
+   # What are the skew and bias estimates
+    BiasSkewList = [IEBiasList.mean(), IEBiasList.std(), IEBSskewList.mean(), IEBSskewList.std(), IEBSskewStatList.mean(), IEBSskewStatList.std()]
+    outdata.extend(BiasSkewList)
+    
+        
+
+    print(&#34;Run time was: %0.2f&#34;%(time.time() - t))
+    # For each run the following should be calculated also
+    # standardized parameters
+    # skewnPess in the BS resmple
+    # statistical test of whether the skewness is large
+    # confidence intervals using 
+    # percentile
+    # BCa
+    return outdata
+
+
+
+def PrintPowerSimResult(outdata):
+    print(&#34;Power for IE with Perc: %0.3f&#34;%(outdata[7]))
+    print(&#34;Power for IE with BC: %0.3f&#34;%(outdata[12]))
+    print(&#34;Power for IE with BCa: %0.3f&#34;%(outdata[17]))    
+    
+    
+def DoCIIncludeZero(IE, TE, DE, a, b):
+    return int(np.prod(IE)&gt;0), int(np.prod(TE)&gt;0), int(np.prod(DE)&gt;0), int(np.prod(a)&gt;0), int(np.prod(b)&gt;0)
+
+def main():
+    #   make sure this script and make submussions match
+    if len(sys.argv[1:]) != 8:
+        print(&#34;ERROR&#34;)
+    else:
+        print(&#34;Getting ready&#34;)
+        # Pass the process ID to use for setting the seed
+        pid = os.getpid() 
+        # Set the seed
+        np.random.seed(pid + int(time.time()))
+        # Run the sim
+        NBoot = int(sys.argv[1:][0])
+        NSim = int(sys.argv[1:][1])
+        N = int(sys.argv[1:][2])
+        Atype = int(sys.argv[1:][3])
+        a = float(sys.argv[1:][4])
+        cP = float(sys.argv[1:][5])
+        OutDir = sys.argv[1:][6]
+        b = float(sys.argv[1:][7])
+        bLIST = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]
+        # If this parameter is too big then assume that the sbatch array was used
+        if b &gt; 0.9:
+            b = bLIST[int(b)-1]
+            
+        
+        alpha = 0.05
+        print(&#34;Calling the simulator&#34;)
+        outdata = CalculateIndPower(NBoot,NSim, N, Atype, alpha, a, b, cP)
+        print(&#34;Done with the simulations&#34;)
+        # Make outputfile name
+        clock = time.localtime()
+        OutFileName = &#34;SimData_NB_%d_NSim_%d_&#34;%(NBoot,NSim)
+        OutFileName = OutFileName+str(clock.tm_hour)+&#34;_&#34;+str(clock.tm_min)+&#34;__&#34;+str(clock.tm_mon)+&#34;_&#34;+str(clock.tm_mday)+&#34;_&#34;+str(clock.tm_year)
+        OutFileName = OutFileName+&#39;_pid&#39;+str(pid)+&#39;.csv&#39;
+        np.savetxt(os.path.join(OutDir, OutFileName), outdata, delimiter = &#39;,&#39;)
+
+def main2():
+    index = int(sys.argv[1:][0])
+    bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+    RunEffectSizeSimulations(bLIST[index])
+        
+if __name__ == &#34;__main__&#34;:
+# #     #MakeBatchScripts()
+    main()
+#     main2()
+
+       </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ProcessTools.Bootstrap_Sklearn"><code class="name flex">
+<span>def <span class="ident">Bootstrap_Sklearn</span></span>(<span>NBoot, func, data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def Bootstrap_Sklearn(NBoot, func, data):
+    # How big is the data
+    N,M = data.shape
+    # prepare output arrays
+    betalist = np.zeros([NBoot,M-1])
+    interlist = np.zeros([NBoot,1])
+    for i in range(0,NBoot):
+        # randomly resample the dataset with the original set with replacement
+        a = resample(data, n_samples=N, replace=True, random_state=i)
+        temp = func(a)
+        betalist[i,:] = temp[0]
+        interlist[i] = temp[1]
+    return betalist,interlist</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CaclulatePercCI"><code class="name flex">
+<span>def <span class="ident">CaclulatePercCI</span></span>(<span>BS, alpha)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CaclulatePercCI(BS, alpha):
+    # count the samples
+    NBoot = BS.shape[0]
+    # sort the resamples
+    sBS = np.sort(BS)
+    # Find the limits
+    Lower = int(np.floor(NBoot*alpha/2))
+    Upper = int(NBoot - np.ceil(NBoot*alpha/2))
+    percCI = [sBS[Lower], sBS[Upper]]
+    return percCI</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateCI"><code class="name flex">
+<span>def <span class="ident">CalculateCI</span></span>(<span>BS, JK, PE, alpha)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateCI(BS, JK, PE, alpha):
+    # If there were no bias, the zh0 would be zero
+    # If there wer no skew, the acc would be zero
+    # The percentile CI assume bias and skew are zero
+    # The bias-corrected CI assume skew is zero
+    # The bias-correct-accelerated assumes nothing
+    NBoot = BS.shape[0]
+    N = JK.shape[0]
+    zA = norm.ppf(alpha/2)
+    z1mA = norm.ppf(1 - alpha/2)
+    # Percentile
+    Alpha1 = norm.cdf(zA)
+    Alpha2 = norm.cdf(z1mA)
+    PCTlower = np.percentile(BS,Alpha1*100)
+    PCTupper = np.percentile(BS,Alpha2*100)
+    PercCI = [PCTlower, PCTupper]
+
+    # Find resamples less than point estimate
+    F = np.sum(BS &lt; PE)
+    BCaCI = [-1, 1]
+    if F &gt; 0:
+        # Estimate the bias in the BS
+        zh0 = norm.ppf(F/NBoot)
+        # Calculate CI using just the bias correction
+        Alpha1 = norm.cdf(zh0 + (zh0 + zA))
+        Alpha2 = norm.cdf(zh0 + (zh0 + z1mA))
+
+        PCTlower = np.percentile(BS,Alpha1*100)
+        PCTupper = np.percentile(BS,Alpha2*100)
+        BCCI = [PCTlower, PCTupper]
+        # Calculate the skew/acceleration factor
+        # Adjust the confidence limits based on the skewness
+        ThetaDiff = JK.sum()/N - JK
+        acc = ((ThetaDiff**3).sum())/(6*((ThetaDiff**2).sum())**(3/2))
+        Alpha1 = norm.cdf(zh0 + (zh0 + zA)/(1 - acc*(zh0 + zA)))
+        Alpha2 = norm.cdf(zh0 + (zh0 + z1mA)/(1 - acc*(zh0 + z1mA)))
+
+        PCTlower = np.percentile(BS,Alpha1*100)
+        PCTupper = np.percentile(BS,Alpha2*100)
+        BCaCI = [PCTlower, PCTupper]
+    # Record the amount of bias and the amount of skewness in the 
+    # resamples
+    Bias = F/NBoot
+    BSskew = scipy.stats.skew(BS)
+    BSskewStat = scipy.stats.skewtest(BS)[0]
+    return PercCI, BCCI, BCaCI, Bias, BSskew, BSskewStat</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateIndPower"><code class="name flex">
+<span>def <span class="ident">CalculateIndPower</span></span>(<span>NBoot, NSimMC, N, typeA, alpha, a, b, cP)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateIndPower(NBoot, NSimMC, N, typeA, alpha, a, b, cP):
+    print(&#34;Starting simulations...&#34;)
+    t = time.time()
+    # Prepare a matrix for counting significant findings
+    PercList = np.zeros((NSimMC,5))
+    BCList = np.zeros((NSimMC,5))
+    BCaList = np.zeros((NSimMC,5))
+    SaList = np.zeros((NSimMC,1))
+    SbList = np.zeros((NSimMC,1))
+    ScPList = np.zeros((NSimMC,1))
+    SIEList  = np.zeros((NSimMC,1))
+    
+    IEBiasList = np.zeros((NSimMC,1))
+    IEBSskewList = np.zeros((NSimMC,1))
+    IEBSskewStatList = np.zeros((NSimMC,1))
+    
+    # Repeatedly generate data for Monte Carlo simulations 
+    for i in range(NSimMC):
+        print(&#34;%d of %d&#34;%(i+1,NSimMC))
+        # Make data
+        data = MakeIndependentData(N, [1,1,1], [1,1,1], [a, b, cP], typeA)
+        # data = MakeMultiVariableData(N,means, covs)
+        # Point estimates
+        #  Model of B with A, parameter is a
+        PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+        # Model of C with A and B, parameters are cp, b
+        PointEstimate3 = Calculate_Beta_Sklearn(data)
+        # Point estimate mediation effects
+        IE, TE, DE, Act_a, Act_b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+        
+        # Bootstrap model 2
+        BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+        JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+        # Bootstrap model 3
+        BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+        JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+        # Bootstrap mediation effects
+        BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+        # Jackknifemediation effects
+        JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+        
+        # Calculate confidence intervals for all effects in the model
+        IEPercCI, IEBCCI, IEBCaCI, IEBiasList[i], IEBSskewList[i], IEBSskewStatList[i] = CalculateCI(BSIE, JKIE, IE, alpha)
+        TEPercCI, TEBCCI, TEBCaCI, TEBias, TEBSskew, TEBSskewStat = CalculateCI(BSTE, JKTE, TE, alpha)
+        DEPercCI, DEBCCI, DEBCaCI, DEBias, DEBSskew, DEBSskewStat = CalculateCI(BSDE, JKDE, DE, alpha)
+        aPercCI, aBCCI, aBCaCI, aBias, aBSskew, aBSskewStat = CalculateCI(BSa, JKa, Act_a, alpha)
+        bPercCI, bBCCI, bBCaCI, bBias, bBSskew, bBSskewStat = CalculateCI(BSb, JKb, Act_b, alpha)
+        # Make boolean list of whether the confidence intervals include zero        
+        PercList[i,:] = DoCIIncludeZero(IEPercCI,TEPercCI, DEPercCI, aPercCI, bPercCI)
+        BCList[i,:] = DoCIIncludeZero(IEBCCI,TEBCCI, DEBCCI, aBCCI, bBCCI)
+        BCaList[i,:] = DoCIIncludeZero(IEBCaCI,TEBCaCI, DEBCaCI, aBCaCI, bBCaCI)
+        # Calculate the effect size for each simulation
+        SaList[i] = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])[0]
+        [ScPList[i],SbList[i]]  = Calculate_standardizedB(data, PointEstimate3[0])
+        SIEList[i] = CalculateKappaEffectSize(data, PointEstimate2[0], PointEstimate3[1])[0]
+    # Now that simulations have been done, how many simulations
+    # resulted in significant results
+    PercPower = PercList.sum(0)/NSimMC
+    BCPower = BCList.sum(0)/NSimMC
+    BCaPower = BCaList.sum(0)/NSimMC
+ 
+    # Prepare output data
+    # Add parameters
+    outdata = [NBoot, NSimMC, N, a, b, cP, typeA]
+    # Add the power estimates from the difference approaches    
+    outdata.extend(PercPower)
+    outdata.extend(BCPower)
+    outdata.extend(BCaPower)
+    # Add mean and std of effect sizes
+    EffectSizeList = [SaList.mean(), SaList.std(), SbList.mean(), SbList.std(), ScPList.mean(), ScPList.std(), SIEList.mean(), SIEList.std()]
+    outdata.extend(EffectSizeList)
+   # What are the skew and bias estimates
+    BiasSkewList = [IEBiasList.mean(), IEBiasList.std(), IEBSskewList.mean(), IEBSskewList.std(), IEBSskewStatList.mean(), IEBSskewStatList.std()]
+    outdata.extend(BiasSkewList)
+    
+        
+
+    print(&#34;Run time was: %0.2f&#34;%(time.time() - t))
+    # For each run the following should be calculated also
+    # standardized parameters
+    # skewnPess in the BS resmple
+    # statistical test of whether the skewness is large
+    # confidence intervals using 
+    # percentile
+    # BCa
+    return outdata</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateKappaEffectSize"><code class="name flex">
+<span>def <span class="ident">CalculateKappaEffectSize</span></span>(<span>data, a, b)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateKappaEffectSize(data, a, b):
+    # https://github.com/NCMlab/ProcessModelsNeuroImage/blob/master/FinalCode/CalculateKappa2.m
+    COV = np.cov(data.T)
+
+    # Calculate the permissible values of a
+    perm_a_1 = (COV[2,1] * COV[2,0] + np.sqrt(COV[1,1] * COV[2,2] - COV[2,1]**2) * np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2))/(COV[0,0] * COV[2,2])
+    perm_a_2 = (COV[2,1] * COV[2,0] - np.sqrt(COV[1,1] * COV[2,2] - COV[2,1]**2) * np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2))/(COV[0,0] * COV[2,2])
+    perm_a = np.array([perm_a_1, perm_a_2])
+    # Calculate the permissible values of b
+    perm_b_1 =  np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2)/np.sqrt(COV[0,0] * COV[1,1] - COV[0,1]**2)
+    perm_b_2 = -np.sqrt(COV[0,0] * COV[2,2] - COV[2,0]**2)/np.sqrt(COV[0,0] * COV[1,1] - COV[0,1]**2)
+    perm_b = np.array([perm_b_1, perm_b_2])
+    # Check the a values and find the one in the same direction as the point estimate of a  
+    if a &gt; 0:
+        temp = perm_a[perm_a &gt; 0]
+        max_a = max(temp)
+    elif a &lt; 0:
+        temp = perm_a[perm_a &lt; 0]
+        max_a = min(temp)
+    else:
+        max_a = 0
+    # Check the b values and find the one in the same direction as the point
+    # estimate of b
+    if b &gt; 0:
+        temp = perm_b[perm_b &gt; 0]
+        max_b = max(temp)
+    elif b &lt; 0:
+        temp = perm_b[perm_b &lt; 0]
+        max_b = min(temp)
+    else:
+        max_b = 0
+    
+    # calculate kappa    
+    perm_ab = max_a*max_b
+    return (a*b)/perm_ab</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateMediationPEEffect"><code class="name flex">
+<span>def <span class="ident">CalculateMediationPEEffect</span></span>(<span>PointEstimate2, PointEstimate3, ia=0, ib=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculate derived effects from simple mediation model.</p>
+<p>Given parameter estimates from a simple mediation model,
+calculate the indirect effect, the total effect and the indirect effects</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>PointEstimate2</code></strong> :&ensp;<code>array</code></dt>
+<dd>This is an array of parameter estimates for the regression equation
+of A on B. With no covariates, this will be an array of length 1</dd>
+<dt><strong><code>PointEstimate3</code></strong> :&ensp;<code>array</code></dt>
+<dd>This is an array of parameter estimates for the regression equation
+of A and B on C. With no covariates, this will be an array of length 2</dd>
+<dt><strong><code>ia</code></strong> :&ensp;<code>int </code></dt>
+<dd>The index of the parameter of interest from the array of beta values
+in PointEstimate2</dd>
+<dt><strong><code>ib</code></strong> :&ensp;<code>int</code></dt>
+<dd>The index of the parameter of interest from the array of beta values
+in PointEstimate3</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>IE</code></dt>
+<dd>The indirect effect, parameter a times b</dd>
+<dt><code>TE</code></dt>
+<dd>The total effect</dd>
+<dt><code>DE</code></dt>
+<dd>The direct effect, the effect of A on C, when B is in the model</dd>
+<dt><code>a</code></dt>
+<dd>The effect of A on B</dd>
+<dt><code>b</code></dt>
+<dd>The effect of B on C, when A is in the model</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
+    &#34;&#34;&#34;Calculate derived effects from simple mediation model.
+    
+    Given parameter estimates from a simple mediation model,
+    calculate the indirect effect, the total effect and the indirect effects
+    
+
+    Parameters
+    ----------
+    PointEstimate2 : array
+        This is an array of parameter estimates for the regression equation
+        of A on B. With no covariates, this will be an array of length 1
+    PointEstimate3 : array
+        This is an array of parameter estimates for the regression equation
+        of A and B on C. With no covariates, this will be an array of length 2
+    ia : int 
+        The index of the parameter of interest from the array of beta values
+        in PointEstimate2
+    ib : int
+        The index of the parameter of interest from the array of beta values
+        in PointEstimate3
+
+    Returns
+    -------
+    IE
+        The indirect effect, parameter a times b
+    TE
+        The total effect
+    DE
+        The direct effect, the effect of A on C, when B is in the model
+    a
+        The effect of A on B
+    b
+        The effect of B on C, when A is in the model
+
+    &#34;&#34;&#34;
+    # Indirect effect
+    # The model of B with A has one beta which is index 0
+    a = PointEstimate2[0][ia]
+    # The model of C with A and B has two betas, b has index = 1
+    b = PointEstimate3[0][ib]
+    IE = a*b
+    # Direct effect
+    DE = PointEstimate3[0][0] # This is cP
+    TE = DE + IE
+    return IE, TE, DE, a, b</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateMediationResampleEffect"><code class="name flex">
+<span>def <span class="ident">CalculateMediationResampleEffect</span></span>(<span>BSbetalist2, BSbetalist3, ia=0, ib=1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateMediationResampleEffect(BSbetalist2, BSbetalist3, ia = 0, ib = 1):
+    # Indirect effect
+    a = np.squeeze(BSbetalist2[:,ia])
+    b = np.squeeze(BSbetalist3[:,ib])
+    IE = a*b
+    DE = np.squeeze(BSbetalist3[:,0])
+    TE = DE + IE
+    return IE, TE, DE, a, b</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateRegressionEffectSizes"><code class="name flex">
+<span>def <span class="ident">CalculateRegressionEffectSizes</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateRegressionEffectSizes():
+    pass</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.CalculateSimulatedEffectSizes"><code class="name flex">
+<span>def <span class="ident">CalculateSimulatedEffectSizes</span></span>(<span>N, a, b, cP, typeA)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
+    # Using provided assigned effects, calculate the estimated effects
+    # and the standardied effect sizes
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [a, b, cP], typeA)
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    temp2 = Calculate_standardizedB(data[:,[0,1]], PointEstimate2[0])
+    temp3 = Calculate_standardizedB(data, PointEstimate3[0])
+    temp4 = Calculate_standardizedB(data, PointEstimate3[1])
+    Sa = temp2[0]
+    Sb = temp3[1]
+    ScP = temp4[0]
+    cP = DE
+    SIE = CalculateKappaEffectSize(data, a, b)
+    return Sa, Sb, ScP, SIE
+    return a, b, cP, Sa, Sb, ScP, IE, SIE</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.Calculate_Beta_Sklearn"><code class="name flex">
+<span>def <span class="ident">Calculate_Beta_Sklearn</span></span>(<span>data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def Calculate_Beta_Sklearn(data):
+    # using linear regression model from sklearn 
+    lm = linear_model.LinearRegression()
+    # M = data.shape[1]
+    #fit the x,y to the model,x will be a 2d matrix and y is a array
+    # if M &gt; 2:
+    model = lm.fit(data[:,0:-1], data[:,-1])
+    # else:
+    #     model = lm.fit(data[:,[0]], data[:,-1])
+    return model.coef_, model.intercept_</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.Calculate_standardizedB"><code class="name flex">
+<span>def <span class="ident">Calculate_standardizedB</span></span>(<span>data, beta)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def Calculate_standardizedB(data, beta):
+    return beta*data[:,0:-1].std(0)/data[:,-1].std()</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.DoCIIncludeZero"><code class="name flex">
+<span>def <span class="ident">DoCIIncludeZero</span></span>(<span>IE, TE, DE, a, b)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def DoCIIncludeZero(IE, TE, DE, a, b):
+    return int(np.prod(IE)&gt;0), int(np.prod(TE)&gt;0), int(np.prod(DE)&gt;0), int(np.prod(a)&gt;0), int(np.prod(b)&gt;0)</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.ExploringIdea"><code class="name flex">
+<span>def <span class="ident">ExploringIdea</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ExploringIdea():  
+    # How do the variance in the simulated data, the weights, the betas and the Bs 
+    # relate to each other?
+    N = 1000
+    
+    data = MakeIndependentData(N, [1,1,1], [0.001,0.001,0.001], [0.25, -0.25, 0.75], 99)
+
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+        # Point estimate mediation effects
+    IE, TE, DE, a, b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    print(&#34;a: %0.3f&#34;%(a))
+    print(&#34;b: %0.3f&#34;%(b))
+    print(&#34;cP: %0.3f&#34;%(DE))
+    print(&#34;TE: %0.3f&#34;%(TE))
+    print(&#34;IE: %0.3f&#34;%(IE))
+    print(Calculate_standardizedB(data, PointEstimate3[0]))
+    print(CalculateKappaEffectSize(data, a, b))
+    
+    N=100
+    NBoot = 1000
+    data = MakeIndependentData(N, [1,1,1], [1,1,1], [0.2, 0.2, 0], 1)
+    # data = MakeMultiVariableData(N,means, covs)
+    # Point estimates
+    #  Model of B with A, parameter is a
+    PointEstimate2 = Calculate_Beta_Sklearn(data[:,[0,1]])
+    # Model of C with A and B, parameters are cp, b
+    PointEstimate3 = Calculate_Beta_Sklearn(data)
+    # Point estimate mediation effects
+    IE, TE, DE, Act_a, Act_b = CalculateMediationPEEffect(PointEstimate2, PointEstimate3)
+    
+    # Bootstrap model 2
+    BSbetalist2, BSinterlist2 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data[:,[0,1]])
+    JKbetalist2, JKinterlist2 = JackKnife(Calculate_Beta_Sklearn, data[:,[0,1]])
+    # Bootstrap model 3
+    BSbetalist3, BSinterlist3 = Bootstrap_Sklearn(NBoot,Calculate_Beta_Sklearn, data)
+    JKbetalist3, JKinterlist3 = JackKnife(Calculate_Beta_Sklearn, data)
+    # Bootstrap mediation effects
+    BSIE, BSTE, BSDE, BSa, BSb = CalculateMediationResampleEffect(BSbetalist2, BSbetalist3)
+    # Jackknifemediation effects
+    JKIE, JKTE, JKDE, JKa, JKb = CalculateMediationResampleEffect(JKbetalist2, JKbetalist3)
+    
+    alpha = 0.05
+    [IEPercCI, IEBCCI, IEBCaCI, IEBSskew, IEBSskewStat] = CalculateCI(BSIE, JKIE, IE, alpha)</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.JackKnife"><code class="name flex">
+<span>def <span class="ident">JackKnife</span></span>(<span>func, data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def JackKnife(func, data):
+    N,M = data.shape
+    # prepare output arrays
+    betalist = np.zeros([N,M-1])
+    interlist = np.zeros([N,1])
+    temp = np.arange(N)
+    for i in range(0,N):
+        JKresample = data[np.delete(temp, i),:]
+        # randomly resample the dataset with the original set with replacement
+        tempP = func(JKresample)
+        betalist[i,:] = tempP[0]
+        interlist[i] = tempP[1]
+    return betalist,interlist</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.MakeIndependentData"><code class="name flex">
+<span>def <span class="ident">MakeIndependentData</span></span>(<span>N=1000, means=[0, 0, 0], stdev=[1, 1, 1], weights=[0, 0, 0], Atype=99)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def MakeIndependentData(N = 1000, means = [0,0,0], stdev = [1,1,1], weights = [0, 0, 0], Atype = 99):
+    # means = A, B, C
+    # weights = a, b, cP
+    # Make sure everything is the correct size
+    M = len(means)
+    S = len(stdev)
+    W = len(weights)
+# try:
+    data = np.zeros([N,M])
+    # Create independent data
+    # columns are A, B, C
+    for i in range(M):
+        data[:,i] = np.random.normal(means[i], stdev[i], N)
+    if Atype == 1:
+        data[:,0] = np.random.uniform(20,80,N)
+    if Atype == 2:
+        data[:,0] = np.concatenate((np.zeros(int(N/2)), np.ones(int(N/2))))
+    # Add weights between predictors to DV
+
+    # Make C data
+    # Make weighted combo of A and B
+    data[:,1] = data[:,1] + data[:,0]*weights[0]
+    data[:,2] = data[:,2] + data[:,0]*weights[2] + data[:,1]*weights[1]
+    
+    return data</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.MakeModeratedEffect"><code class="name flex">
+<span>def <span class="ident">MakeModeratedEffect</span></span>(<span>data, i=0, j=1, effect=0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Summary line.</p>
+<p>Extended description of function.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>arg1</code></strong> :&ensp;<code>int</code></dt>
+<dd>Description of arg1</dd>
+<dt><strong><code>arg2</code></strong> :&ensp;<code>str</code></dt>
+<dd>Description of arg2</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>Description of return value</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; func(1, &quot;a&quot;)
+True
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
+    &#34;&#34;&#34;Summary line.
+
+    Extended description of function.
+
+    Parameters
+    ----------
+    arg1 : int
+        Description of arg1
+    arg2 : str
+        Description of arg2
+
+    Returns
+    -------
+    bool
+        Description of return value
+
+    Examples
+    --------
+    &gt;&gt;&gt; func(1, &#34;a&#34;)
+    True
+    &#34;&#34;&#34;
+    # How big is the data
+    N,M = data.shape
+    # Remove mean of each column
+    iD = data[:,i] - data[:,i].mean()
+    print(iD.mean())
+    jD = data[:,j] - data[:,j].mean()
+    print(jD.mean())
+    # Create the moderation regressor. 
+    # This regressor is a vector and is converted to an array for the multiplication
+    mD = np.array(iD*jD)
+    print(mD.mean())
+    # Add a moderator effect to the DV
+    OutData = np.append(data, np.expand_dims(mD, axis = 1), axis = 1)
+    OutData[:,-1] = OutData[:,-1] + mD*effect
+    # Append the moderator to the data 
+    return OutData</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.PrintPowerSimResult"><code class="name flex">
+<span>def <span class="ident">PrintPowerSimResult</span></span>(<span>outdata)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def PrintPowerSimResult(outdata):
+    print(&#34;Power for IE with Perc: %0.3f&#34;%(outdata[7]))
+    print(&#34;Power for IE with BC: %0.3f&#34;%(outdata[12]))
+    print(&#34;Power for IE with BCa: %0.3f&#34;%(outdata[17]))    </code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.RunEffectSizeSimulations"><code class="name flex">
+<span>def <span class="ident">RunEffectSizeSimulations</span></span>(<span>b)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def RunEffectSizeSimulations(b):
+    cNamesAll = [&#39;N&#39;,&#39;NSim&#39;,&#39;typeA&#39;,&#39;Exp_a&#39;,&#39;Exp_b&#39;,&#39;Exp_cP&#39;, &#39;mAct_a&#39;,&#39;stdAct_a&#39;,&#39;mAct_b&#39;,&#39;stdAct_b&#39;, &#39;mAct_cP&#39;,&#39;stdAct_cP&#39;,&#39;m_IE&#39;,&#39;std_IE&#39;, &#39;m_Sa&#39;,&#39;std_Sa&#39;,&#39;m_Sb&#39;,&#39;std_Sb&#39;, &#39;m_ScP&#39;,&#39;std_ScP&#39;,&#39;m_K&#39;,&#39;std_K&#39;]
+    dfOutAll = pd.DataFrame(columns=cNamesAll)
+    N = np.arange(10,101,10)
+    typeA = [99,1,2] # cont, unif, dicotomous     
+    aLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]#np.arange(-0.5,0.1,0.5)
+    cPLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)
+    #BtoC = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]# np.arange(-1.0,1.01,0.5)    
+    Nsim = 100   
+    count = 0
+    
+    for i1 in N:
+        for i3 in typeA:
+            for i8 in aLIST:
+                for i9 in cPLIST:
+                    #for i10 in BtoC:
+                    cNames = [&#39;a&#39;, &#39;b&#39;, &#39;cP&#39;, &#39;Sa&#39;,&#39;Sb&#39;,&#39;ScP&#39;,&#39;IE&#39;,&#39;SIE&#39;]
+                    dfOut = pd.DataFrame(columns=cNames)
+                    for s in range(Nsim):
+                        li = CalculateSimulatedEffectSizes(i1, i8, b, i9, i3)
+                        row = pd.Series(li, index = cNames)
+                        dfOut = dfOut.append(row, ignore_index = True)
+                    liAll = [i1, Nsim, i3, i8, b, i9, dfOut[&#39;a&#39;].mean(), dfOut[&#39;a&#39;].std(), dfOut[&#39;b&#39;].mean(), dfOut[&#39;b&#39;].std(), dfOut[&#39;cP&#39;].mean(), dfOut[&#39;cP&#39;].std(), dfOut[&#39;IE&#39;].mean(), dfOut[&#39;IE&#39;].std()]
+                    liAll.append(dfOut[&#39;Sa&#39;].mean())
+                    liAll.append(dfOut[&#39;Sa&#39;].std()) 
+                    liAll.append(dfOut[&#39;Sb&#39;].mean()) 
+                    liAll.append(dfOut[&#39;Sb&#39;].std()) 
+                    liAll.append(dfOut[&#39;ScP&#39;].mean())
+                    liAll.append(dfOut[&#39;ScP&#39;].std())
+                    liAll.append(dfOut[&#39;SIE&#39;].mean()) 
+                    liAll.append(dfOut[&#39;SIE&#39;].std())
+                    
+                    row = pd.Series(liAll, index = cNamesAll)
+                    dfOutAll = dfOutAll.append(row, ignore_index = True)
+                    count += 1
+                    print(count)
+    dfOutAll.to_csv(&#39;SimulationsOfEffectSize_%0.1f.csv&#39;%(b))</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main():
+    #   make sure this script and make submussions match
+    if len(sys.argv[1:]) != 8:
+        print(&#34;ERROR&#34;)
+    else:
+        print(&#34;Getting ready&#34;)
+        # Pass the process ID to use for setting the seed
+        pid = os.getpid() 
+        # Set the seed
+        np.random.seed(pid + int(time.time()))
+        # Run the sim
+        NBoot = int(sys.argv[1:][0])
+        NSim = int(sys.argv[1:][1])
+        N = int(sys.argv[1:][2])
+        Atype = int(sys.argv[1:][3])
+        a = float(sys.argv[1:][4])
+        cP = float(sys.argv[1:][5])
+        OutDir = sys.argv[1:][6]
+        b = float(sys.argv[1:][7])
+        bLIST = [-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5]
+        # If this parameter is too big then assume that the sbatch array was used
+        if b &gt; 0.9:
+            b = bLIST[int(b)-1]
+            
+        
+        alpha = 0.05
+        print(&#34;Calling the simulator&#34;)
+        outdata = CalculateIndPower(NBoot,NSim, N, Atype, alpha, a, b, cP)
+        print(&#34;Done with the simulations&#34;)
+        # Make outputfile name
+        clock = time.localtime()
+        OutFileName = &#34;SimData_NB_%d_NSim_%d_&#34;%(NBoot,NSim)
+        OutFileName = OutFileName+str(clock.tm_hour)+&#34;_&#34;+str(clock.tm_min)+&#34;__&#34;+str(clock.tm_mon)+&#34;_&#34;+str(clock.tm_mday)+&#34;_&#34;+str(clock.tm_year)
+        OutFileName = OutFileName+&#39;_pid&#39;+str(pid)+&#39;.csv&#39;
+        np.savetxt(os.path.join(OutDir, OutFileName), outdata, delimiter = &#39;,&#39;)</code></pre>
+</details>
+</dd>
+<dt id="ProcessTools.main2"><code class="name flex">
+<span>def <span class="ident">main2</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main2():
+    index = int(sys.argv[1:][0])
+    bLIST = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4]
+    RunEffectSizeSimulations(bLIST[index])</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ProcessTools.Bootstrap_Sklearn" href="#ProcessTools.Bootstrap_Sklearn">Bootstrap_Sklearn</a></code></li>
+<li><code><a title="ProcessTools.CaclulatePercCI" href="#ProcessTools.CaclulatePercCI">CaclulatePercCI</a></code></li>
+<li><code><a title="ProcessTools.CalculateCI" href="#ProcessTools.CalculateCI">CalculateCI</a></code></li>
+<li><code><a title="ProcessTools.CalculateIndPower" href="#ProcessTools.CalculateIndPower">CalculateIndPower</a></code></li>
+<li><code><a title="ProcessTools.CalculateKappaEffectSize" href="#ProcessTools.CalculateKappaEffectSize">CalculateKappaEffectSize</a></code></li>
+<li><code><a title="ProcessTools.CalculateMediationPEEffect" href="#ProcessTools.CalculateMediationPEEffect">CalculateMediationPEEffect</a></code></li>
+<li><code><a title="ProcessTools.CalculateMediationResampleEffect" href="#ProcessTools.CalculateMediationResampleEffect">CalculateMediationResampleEffect</a></code></li>
+<li><code><a title="ProcessTools.CalculateRegressionEffectSizes" href="#ProcessTools.CalculateRegressionEffectSizes">CalculateRegressionEffectSizes</a></code></li>
+<li><code><a title="ProcessTools.CalculateSimulatedEffectSizes" href="#ProcessTools.CalculateSimulatedEffectSizes">CalculateSimulatedEffectSizes</a></code></li>
+<li><code><a title="ProcessTools.Calculate_Beta_Sklearn" href="#ProcessTools.Calculate_Beta_Sklearn">Calculate_Beta_Sklearn</a></code></li>
+<li><code><a title="ProcessTools.Calculate_standardizedB" href="#ProcessTools.Calculate_standardizedB">Calculate_standardizedB</a></code></li>
+<li><code><a title="ProcessTools.DoCIIncludeZero" href="#ProcessTools.DoCIIncludeZero">DoCIIncludeZero</a></code></li>
+<li><code><a title="ProcessTools.ExploringIdea" href="#ProcessTools.ExploringIdea">ExploringIdea</a></code></li>
+<li><code><a title="ProcessTools.JackKnife" href="#ProcessTools.JackKnife">JackKnife</a></code></li>
+<li><code><a title="ProcessTools.MakeIndependentData" href="#ProcessTools.MakeIndependentData">MakeIndependentData</a></code></li>
+<li><code><a title="ProcessTools.MakeModeratedEffect" href="#ProcessTools.MakeModeratedEffect">MakeModeratedEffect</a></code></li>
+<li><code><a title="ProcessTools.PrintPowerSimResult" href="#ProcessTools.PrintPowerSimResult">PrintPowerSimResult</a></code></li>
+<li><code><a title="ProcessTools.RunEffectSizeSimulations" href="#ProcessTools.RunEffectSizeSimulations">RunEffectSizeSimulations</a></code></li>
+<li><code><a title="ProcessTools.main" href="#ProcessTools.main">main</a></code></li>
+<li><code><a title="ProcessTools.main2" href="#ProcessTools.main2">main2</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+</footer>
+</body>
+</html>
