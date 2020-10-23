@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module ProcessTools</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>ProcessTools</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython/ProcessTools.py">/Users/jasonsteffener/Documents/GitHub/ProcessModelsPython/ProcessTools.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="sklearn.linear_model.html">sklearn.linear_model</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="scipy.html">scipy</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-Bootstrap_Sklearn"><strong>Bootstrap_Sklearn</strong></a>(NBoot, func, data)</dt></dl>
+ <dl><dt><a name="-CaclulatePercCI"><strong>CaclulatePercCI</strong></a>(BS, alpha)</dt></dl>
+ <dl><dt><a name="-CalculateCI"><strong>CalculateCI</strong></a>(BS, JK, PE, alpha)</dt><dd><tt>Calculate&nbsp;confidence&nbsp;intervals&nbsp;from&nbsp;the&nbsp;bootstrap&nbsp;resamples<br>
+&nbsp;<br>
+Confidence&nbsp;intervals&nbsp;are&nbsp;calculated&nbsp;using&nbsp;three&nbsp;difference&nbsp;methods:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Percentile<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;method&nbsp;finds&nbsp;the&nbsp;alpha/2&nbsp;percentiles&nbsp;at&nbsp;both&nbsp;ends&nbsp;of&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;distribution&nbsp;of&nbsp;bootstratp&nbsp;resamples.&nbsp;First,&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;for&nbsp;these&nbsp;limits&nbsp;is&nbsp;found&nbsp;as:&nbsp;NBoot*(alpha/2).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;this&nbsp;is&nbsp;a&nbsp;non&nbsp;interger&nbsp;value,&nbsp;it&nbsp;is&nbsp;rounded&nbsp;in&nbsp;the&nbsp;more<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;conservative&nbsp;direction.&nbsp;Using&nbsp;these&nbsp;indices,&nbsp;the&nbsp;bootstrap&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values&nbsp;are&nbsp;the&nbsp;confidence&nbsp;intervals.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Bias-corrected<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It&nbsp;is&nbsp;possible&nbsp;that&nbsp;the&nbsp;distribution&nbsp;of&nbsp;bootstrap&nbsp;resmaples<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;biased&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;point&nbsp;estimate.&nbsp;Ideally,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there&nbsp;whould&nbsp;be&nbsp;an&nbsp;equal&nbsp;number&nbsp;of&nbsp;bootstrap&nbsp;resample&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above&nbsp;and&nbsp;below&nbsp;the&nbsp;point&nbsp;estimate.&nbsp;And&nbsp;difference&nbsp;is&nbsp;considered<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;bias.&nbsp;This&nbsp;approach&nbsp;adjusts&nbsp;for&nbsp;this&nbsp;bias.&nbsp;If&nbsp;there&nbsp;is&nbsp;no&nbsp;bias<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;bootstrap&nbsp;resamples,&nbsp;the&nbsp;adjustment&nbsp;factor&nbsp;is&nbsp;zero&nbsp;and&nbsp;no<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adjustment&nbsp;is&nbsp;made&nbsp;so&nbsp;the&nbsp;result&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;from&nbsp;the&nbsp;percentile<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Bias-corrected,&nbsp;accelerated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;addition&nbsp;to&nbsp;there&nbsp;being&nbsp;a&nbsp;possible&nbsp;bias&nbsp;in&nbsp;the&nbsp;bootstrap&nbsp;resamples,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;is&nbsp;also&nbsp;possible&nbsp;that&nbsp;there&nbsp;is&nbsp;some&nbsp;skew.&nbsp;The&nbsp;amount&nbsp;of&nbsp;skew&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculated&nbsp;and&nbsp;used&nbsp;to&nbsp;adjust&nbsp;the&nbsp;confidence&nbsp;intervals&nbsp;in&nbsp;this&nbsp;method.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;there&nbsp;is&nbsp;no&nbsp;skew,&nbsp;this&nbsp;method&nbsp;gives&nbsp;the&nbsp;same&nbsp;as&nbsp;the&nbsp;bias-correct<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approach.&nbsp;If&nbsp;there&nbsp;is&nbsp;no&nbsp;skew&nbsp;and&nbsp;no&nbsp;bias&nbsp;the&nbsp;results&nbsp;are&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;same&nbsp;as&nbsp;the&nbsp;percentile&nbsp;method.<br>
+Parameters<br>
+----------<br>
+BS&nbsp;:&nbsp;array&nbsp;of&nbsp;length&nbsp;number&nbsp;of&nbsp;bootstrap&nbsp;resamples<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bootstrap&nbsp;resamples.<br>
+JK&nbsp;:&nbsp;array&nbsp;of&nbsp;length&nbsp;N,&nbsp;the&nbsp;sample&nbsp;size<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Jack-knife&nbsp;resamples.<br>
+PE&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;point&nbsp;estimate&nbsp;value.<br>
+alpha&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;statstical&nbsp;alpha&nbsp;used&nbsp;to&nbsp;calculate&nbsp;the&nbsp;confidence&nbsp;intervals.<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+PercCI&nbsp;:&nbsp;array&nbsp;of&nbsp;two&nbsp;floats<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Confidence&nbsp;intervals&nbsp;calculated&nbsp;using&nbsp;the&nbsp;percentile&nbsp;method.<br>
+BCCI&nbsp;:&nbsp;array&nbsp;of&nbsp;two&nbsp;floats<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Confidence&nbsp;intervals&nbsp;calculated&nbsp;using&nbsp;the&nbsp;bias-corrected&nbsp;method.<br>
+BCaCI&nbsp;:&nbsp;array&nbsp;of&nbsp;two&nbsp;floats<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Confidence&nbsp;intervals&nbsp;calculated&nbsp;using&nbsp;the&nbsp;bias-correctd,&nbsp;accelerated&nbsp;method.<br>
+Bias&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;size&nbsp;of&nbsp;the&nbsp;bias&nbsp;calculated&nbsp;from&nbsp;the&nbsp;distribution&nbsp;of&nbsp;bootstrap<br>
+&nbsp;&nbsp;&nbsp;&nbsp;resamples.<br>
+BSskew&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;size&nbsp;of&nbsp;the&nbsp;skew&nbsp;calculated&nbsp;from&nbsp;the&nbsp;distribution&nbsp;of&nbsp;bootstrap<br>
+&nbsp;&nbsp;&nbsp;&nbsp;resamples.<br>
+BSskewStat&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;statstic&nbsp;associated&nbsp;with&nbsp;the&nbsp;calculated&nbsp;skew&nbsp;in&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;distribution&nbsp;of&nbsp;bootstrap&nbsp;resamples.</tt></dd></dl>
+ <dl><dt><a name="-CalculateIndPower"><strong>CalculateIndPower</strong></a>(NBoot, NSimMC, N, typeA, alpha, a, b, cP)</dt></dl>
+ <dl><dt><a name="-CalculateKappaEffectSize"><strong>CalculateKappaEffectSize</strong></a>(data, a, b)</dt></dl>
+ <dl><dt><a name="-CalculateMediationPEEffect"><strong>CalculateMediationPEEffect</strong></a>(PointEstimate2, PointEstimate3, ia=0, ib=1)</dt><dd><tt>Calculate&nbsp;derived&nbsp;effects&nbsp;from&nbsp;simple&nbsp;mediation&nbsp;model.<br>
+&nbsp;<br>
+Given&nbsp;parameter&nbsp;estimates&nbsp;from&nbsp;a&nbsp;simple&nbsp;mediation&nbsp;model,<br>
+calculate&nbsp;the&nbsp;indirect&nbsp;effect,&nbsp;the&nbsp;total&nbsp;effect&nbsp;and&nbsp;the&nbsp;indirect&nbsp;effects<br>
+&nbsp;<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+PointEstimate2&nbsp;:&nbsp;array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;array&nbsp;of&nbsp;parameter&nbsp;estimates&nbsp;for&nbsp;the&nbsp;regression&nbsp;equation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;A&nbsp;on&nbsp;B.&nbsp;With&nbsp;no&nbsp;covariates,&nbsp;this&nbsp;will&nbsp;be&nbsp;an&nbsp;array&nbsp;of&nbsp;length&nbsp;1<br>
+PointEstimate3&nbsp;:&nbsp;array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;array&nbsp;of&nbsp;parameter&nbsp;estimates&nbsp;for&nbsp;the&nbsp;regression&nbsp;equation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;A&nbsp;and&nbsp;B&nbsp;on&nbsp;C.&nbsp;With&nbsp;no&nbsp;covariates,&nbsp;this&nbsp;will&nbsp;be&nbsp;an&nbsp;array&nbsp;of&nbsp;length&nbsp;2<br>
+ia&nbsp;:&nbsp;int&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;index&nbsp;of&nbsp;the&nbsp;parameter&nbsp;of&nbsp;interest&nbsp;from&nbsp;the&nbsp;array&nbsp;of&nbsp;beta&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;PointEstimate2<br>
+ib&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;index&nbsp;of&nbsp;the&nbsp;parameter&nbsp;of&nbsp;interest&nbsp;from&nbsp;the&nbsp;array&nbsp;of&nbsp;beta&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;PointEstimate3<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+IE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;indirect&nbsp;effect,&nbsp;parameter&nbsp;a&nbsp;times&nbsp;b<br>
+TE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;total&nbsp;effect,&nbsp;which&nbsp;is&nbsp;IE&nbsp;plus&nbsp;DE<br>
+DE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;direct&nbsp;effect,&nbsp;the&nbsp;effect&nbsp;of&nbsp;A&nbsp;on&nbsp;C,&nbsp;when&nbsp;B&nbsp;is&nbsp;in&nbsp;the&nbsp;model<br>
+a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;effect&nbsp;of&nbsp;A&nbsp;on&nbsp;B<br>
+b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;effect&nbsp;of&nbsp;B&nbsp;on&nbsp;C,&nbsp;when&nbsp;A&nbsp;is&nbsp;in&nbsp;the&nbsp;model</tt></dd></dl>
+ <dl><dt><a name="-CalculateMediationResampleEffect"><strong>CalculateMediationResampleEffect</strong></a>(BSbetalist2, BSbetalist3, ia=0, ib=1)</dt></dl>
+ <dl><dt><a name="-CalculateRegressionEffectSizes"><strong>CalculateRegressionEffectSizes</strong></a>()</dt></dl>
+ <dl><dt><a name="-CalculateSimulatedEffectSizes"><strong>CalculateSimulatedEffectSizes</strong></a>(N, a, b, cP, typeA)</dt></dl>
+ <dl><dt><a name="-Calculate_Beta_Sklearn"><strong>Calculate_Beta_Sklearn</strong></a>(data)</dt></dl>
+ <dl><dt><a name="-Calculate_standardizedB"><strong>Calculate_standardizedB</strong></a>(data, beta)</dt></dl>
+ <dl><dt><a name="-DoCIIncludeZero"><strong>DoCIIncludeZero</strong></a>(IE, TE, DE, a, b)</dt></dl>
+ <dl><dt><a name="-ExploringIdea"><strong>ExploringIdea</strong></a>()</dt></dl>
+ <dl><dt><a name="-JackKnife"><strong>JackKnife</strong></a>(func, data)</dt></dl>
+ <dl><dt><a name="-MakeIndependentData"><strong>MakeIndependentData</strong></a>(N=1000, means=[0, 0, 0], stdev=[1, 1, 1], weights=[0, 0, 0], Atype=99)</dt></dl>
+ <dl><dt><a name="-MakeModeratedEffect"><strong>MakeModeratedEffect</strong></a>(data, i=0, j=1, effect=0)</dt><dd><tt>Summary&nbsp;line.<br>
+&nbsp;<br>
+Extended&nbsp;description&nbsp;of&nbsp;function.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+arg1&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;of&nbsp;arg1<br>
+arg2&nbsp;:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;of&nbsp;arg2<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Description&nbsp;of&nbsp;return&nbsp;value<br>
+&nbsp;<br>
+Examples<br>
+--------<br>
+&gt;&gt;&gt;&nbsp;func(1,&nbsp;"a")<br>
+True</tt></dd></dl>
+ <dl><dt><a name="-PrintPowerSimResult"><strong>PrintPowerSimResult</strong></a>(outdata)</dt></dl>
+ <dl><dt><a name="-RunEffectSizeSimulations"><strong>RunEffectSizeSimulations</strong></a>(b)</dt></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt></dl>
+ <dl><dt><a name="-main2"><strong>main2</strong></a>()</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>norm</strong> = &lt;scipy.stats._continuous_distns.norm_gen object&gt;</td></tr></table>
+</body></html>

@@ -75,7 +75,7 @@ def CalculateMediationPEEffect(PointEstimate2, PointEstimate3, ia = 0, ib = 1):
     IE
         The indirect effect, parameter a times b
     TE
-        The total effect
+        The total effect, which is IE plus DE
     DE
         The direct effect, the effect of A on C, when B is in the model
     a
@@ -119,6 +119,63 @@ def JackKnife(func, data):
     return betalist,interlist
 
 def CalculateCI(BS, JK, PE, alpha):
+    """Calculate confidence intervals from the bootstrap resamples
+    
+    Confidence intervals are calculated using three difference methods:
+        Percentile
+            This method finds the alpha/2 percentiles at both ends of 
+            the distribution of bootstratp resamples. First, the 
+            index for these limits is found as: NBoot*(alpha/2).
+            If this is a non interger value, it is rounded in the more
+            conservative direction. Using these indices, the bootstrap 
+            values are the confidence intervals.
+
+        Bias-corrected
+            It is possible that the distribution of bootstrap resmaples
+            are biased with respect to the point estimate. Ideally,
+            there whould be an equal number of bootstrap resample values
+            above and below the point estimate. And difference is considered
+            a bias. This approach adjusts for this bias. If there is no bias
+            in the bootstrap resamples, the adjustment factor is zero and no
+            adjustment is made so the result is the same as from the percentile
+            method.
+        Bias-corrected, accelerated
+            In addition to there being a possible bias in the bootstrap resamples,
+            it is also possible that there is some skew. The amount of skew is
+            calculated and used to adjust the confidence intervals in this method.
+            If there is no skew, this method gives the same as the bias-correct
+            approach. If there is no skew and no bias the results are the 
+            same as the percentile method.
+    Parameters
+    ----------
+    BS : array of length number of bootstrap resamples
+        bootstrap resamples.
+    JK : array of length N, the sample size
+        Jack-knife resamples.
+    PE : float
+        the point estimate value.
+    alpha : float
+        statstical alpha used to calculate the confidence intervals.
+
+    Returns
+    -------
+    PercCI : array of two floats
+        Confidence intervals calculated using the percentile method.
+    BCCI : array of two floats
+        Confidence intervals calculated using the bias-corrected method.
+    BCaCI : array of two floats
+        Confidence intervals calculated using the bias-correctd, accelerated method.
+    Bias : float
+        The size of the bias calculated from the distribution of bootstrap
+        resamples.
+    BSskew : float
+        The size of the skew calculated from the distribution of bootstrap
+        resamples.
+    BSskewStat : float
+        The statstic associated with the calculated skew in the 
+        distribution of bootstrap resamples.
+
+    """
     # If there were no bias, the zh0 would be zero
     # If there wer no skew, the acc would be zero
     # The percentile CI assume bias and skew are zero
