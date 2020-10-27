@@ -45,7 +45,7 @@ def MakeBatchScripts():
                             f.write("#SBATCH --job-name=%s.job\n"%(os.path.join(BaseDir, 'jobs', fileName)))
                             f.write("#SBATCH --output=%s.out\n"%(os.path.join(BaseDir, 'out', fileName)))
                             f.write("#SBATCH --error=%s.err\n"%(os.path.join(BaseDir, 'out', fileName)))
-                            f.write("#SBATCH --time=01:00:00\n")
+                            f.write("#SBATCH --time=06:00:00\n")
                             f.write("#SBATCH --account=def-steffejr-ab\n")
                             f.write("#SBATCH --mem-per-cpu=512M\n\n")
                             # Added an array for at least one dimension of simulations
