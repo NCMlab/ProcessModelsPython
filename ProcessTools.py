@@ -8,6 +8,7 @@ import time
 import sys
 import os
 import pandas as pd
+import pingouin as pg
 
 def MakeModeratedEffect(data,i = 0, j = 1, effect = 0):
     """Summary line.
@@ -233,6 +234,12 @@ def CaclulatePercCI(BS, alpha):
     Upper = int(NBoot - np.ceil(NBoot*alpha/2))
     percCI = [sBS[Lower], sBS[Upper]]
     return percCI
+
+def ExploreIdea2():
+    [a, b, cP, Sa, Sb, ScP, IE, SIE, data] = CalculateSimulatedEffectSizes(1000, 0.5, 0.5, 0.5, 99)
+    df = pd.DataFrame(data, columns={'C','A','B'})
+    print(np.corrcoef(data.T))
+    pg.partial_corr(data=df, x='A', y='C', covar='B').round(3)
     
 def ExploringIdea():  
     # How do the variance in the simulated data, the weights, the betas and the Bs 
@@ -251,7 +258,7 @@ def ExploringIdea():
     print("TE: %0.3f"%(TE))
     print("IE: %0.3f"%(IE))
     print(Calculate_standardizedB(data, PointEstimate3[0]))
-    print(CalculateKappaEffectSize(data, a, b))
+    # print(CalculateKappaEffectSize(data, a, b))
     
     N=100
     NBoot = 1000
@@ -300,8 +307,8 @@ def CalculateSimulatedEffectSizes(N, a, b, cP, typeA):
     ScP = temp4[0]
     cP = DE
     SIE = CalculateKappaEffectSize(data, a, b)
-    return Sa, Sb, ScP, SIE
-    return a, b, cP, Sa, Sb, ScP, IE, SIE
+    #return Sa, Sb, ScP, SIE
+    return a, b, cP, Sa, Sb, ScP, IE, SIE, data
 
 def RunEffectSizeSimulations(b):
     cNamesAll = ['N','NSim','typeA','Exp_a','Exp_b','Exp_cP', 'mAct_a','stdAct_a','mAct_b','stdAct_b', 'mAct_cP','stdAct_cP','m_IE','std_IE', 'm_Sa','std_Sa','m_Sb','std_Sb', 'm_ScP','std_ScP','m_K','std_K']
@@ -379,13 +386,9 @@ def CalculateKappaEffectSize(data, a, b):
     return (a*b)/perm_ab
     
 
-
-
 def CalculateRegressionEffectSizes():
     pass
     
-
-
 
 def Calculate_Beta_Sklearn(data):
     # using linear regression model from sklearn 
