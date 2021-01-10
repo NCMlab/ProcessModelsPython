@@ -27,7 +27,7 @@ a = [0.3, -0.3, 0.3, -0.3]
 b = [-0, 0.1, 0.2, 0.3, 0.4, 0.5]
 b = [-0.3, 0.3, 0.3, -0.3]
 cP = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
-cP = [-0.3, 0, 0.3]
+cP = [ 0]
 for k in cP:
     for i in a:
         for j in b:
@@ -105,6 +105,32 @@ plt.hlines(0.8,0,200,linestyles='dashed')
 plt.show()
 
 
+# Calculate how many more people are needed for every level of power
+# between the BC and Perc methods
+dBC = df21["IEBCPow"]
+dPC = df21["IEPercPow"]
+dN = df21["N"]
+# Interpolate between the two curves
+# Interpolate these curves to 1000 points
+PowerInterp = np.arange(0,1.001,0.001)
+NInterp = np.arange(0,200+200/1000,200/1000)
+iBC = np.interp(NInterp, dN, dBC)
+iPC = np.interp(NInterp, dN, dPC)
+# cycle over the values of power and find the closest N values
+# This will allow us to make a plot 
+DiffPowLevels = np.arange(0.1,1,0.2)
+DiffN = np.zeros(DiffPowLevels.shape)
+count = 0
+for i in DiffPowLevels:
+    value = next(x for x in iBC if x > i)
+    BCindex = np.where(iBC == value)[0][0]
+    value = next(x for x in iPC if x > i)
+    PCindex = np.where(iPC == value)[0][0]
+    DiffN[count] = np.round(NInterp[PCindex] - NInterp[BCindex])
+    count += 1
+
+plt.plot(DiffPowLevels, DiffN)
+
 # Compare A types
 a1 = 0.5
 b1 = 0.4
@@ -163,12 +189,13 @@ for k in cP:
         #plt.savefig(os.path.join(BaseDir, OutFileName))        
         plt.show()
         
+        
 # Fix a, fix b, change cP and see how Sb changes
 # Plot N versus b and Sb for different cP values
 a = [0.5]
 # b = [-0, 0.1, 0.2, 0.3, 0.4, 0.5]
-b = [0.5]
-cP = [-0.5,-0.4,-0.3,-0.2,-0.1,0, 0.1, 0.2, 0.3, 0.4, 0.5]
+b = [-0.5]
+cP = [0]
 
 
 for i in a:
@@ -191,3 +218,102 @@ for i in a:
         #OutFileName = "PowerPlot_a_%0.1f_cP_%0.1f_Atype_Uniform.png"%(i,k)
         #plt.savefig(os.path.join(BaseDir, OutFileName))        
         plt.show()
+# SUPPRESSION
+# Plot AtoC
+
+a = [0.3]
+b = [0.3]
+cP = [-0.1]
+
+for i in a:
+    for j in b:
+        for k in cP:
+            Filter = ((df["a"] == i) & (df["b"] == j) & (df["cP"] == k) & (df["typeA"] == 99))
+            N = df[Filter]["N"]
+            df2 = df[Filter]
+            df2 = df2.sort_values("N")
+            bStr = "%0.1f"%(j)
+            plt.plot(df2["N"], df2["IEBCaPow"], label='Indirect')
+            plt.plot(df2["N"], df2["TEBCaPow"], label='Total')
+        plt.legend(title="Effect")
+        plt.xlabel('Sample Size')
+        plt.ylabel('Power')
+        plt.title("a = %0.1f, b = %0.1f, c' = %0.1f"%(i,j,k))
+        plt.xlim(0,200)
+        plt.ylim(0,1)
+        plt.hlines(0.8,0,200,linestyles='dashed')
+# Save each figure
+        OutFileName = "SUPP_PowerPlot_a_%0.1f_b_%0.1f_cP_%0.1f_Atype_Uniform.png"%(i,j,k)
+        plt.savefig(os.path.join(BaseDir, OutFileName))        
+        plt.show()        
+# FULL AND PARTIAL MEDIATION
+
+a = [0.3]
+b = [0.3]
+cP = [0.1,0.3,0.5]
+
+for i in a:
+    for j in b:
+        for k in cP:        
+            Filter = ((df["a"] == i) & (df["b"] == j) & (df["cP"] == k) & (df["typeA"] == 99))
+            N = df[Filter]["N"]
+            df2 = df[Filter]
+            df2 = df2.sort_values("N")
+            bStr = "%0.1f"%(k)
+            plt.plot(df2["N"], df2["IEBCaPow"], label=bStr)
+            #plt.plot(df2["N"], df2["TEBCaPow"], label='Total')
+        plt.legend(title="c'")
+        plt.xlabel('Sample Size')
+        plt.ylabel('Power')
+        plt.title("a = %0.1f, b = %0.1f"%(i,j))
+        plt.xlim(0,200)
+        plt.ylim(0,1)
+        plt.hlines(0.8,0,200,linestyles='dashed')
+# Save each figure
+        OutFileName = "FullPart_PowerPlot_a_%0.1f_b_%0.1f_Atype_Uniform.png"%(i,j)
+        plt.savefig(os.path.join(BaseDir, OutFileName))        
+        plt.show()        
+                
+# Make plots of collinearity
+def PlotCollinearity():
+    # Make plot of the power of DIRECT as a changes
+    # Pick a sample size
+    N = [20,40,60,80,100,120,140,160,180,200]
+    
+    N = [100]# Pick value
+
+    b = [0.3]
+
+    cP = [0.3]
+    
+    
+    
+    for k in cP:
+        for j in b:
+            for i in N:
+                #Filter = ((df["a"] == i) & (df["b"] == j) & (df["cP"] == k) & (df["typeA"] == 99))
+                Filter = ((df["N"] == i) &(df["b"] == j) & (df["cP"] == k) & (df["typeA"] == 99))
+                
+                N = df[Filter]["N"]
+                a = df[Filter]["a"]
+                df2 = df[Filter]
+                df2 = df2.sort_values("a")
+                #bStr = "%0.1f, %0.2f, %0.2f, %0.2f"%(j,df2['SbMean'].mean(),k,df2['SaMean'].mean())
+                bStr = "%0d"%(i)
+                plt.plot(df2["a"], df2["DEBCPow"], label=bStr)
+            plt.legend(title="N")
+            plt.xlabel('a')
+            plt.ylabel('Power of Direct Effect')
+            #plt.title("a = %0.1f (%0.2f), c' = %0.1f"%(i,df2['SaMean'].mean(),k))
+            plt.title("b = %0.1f, Direct effect = %0.1f"%(j,k))
+            plt.xlim(-0.5,0.5)
+            plt.ylim(0,1)
+            plt.hlines(0.8,-0.5,0.5,linestyles='dashed')
+    # Save each figure
+            #OutFileName = "PowerPlot_a_%0.1f_cP_%0.1f_Atype_Uniform.png"%(i,k)
+            #plt.savefig(os.path.join(BaseDir, OutFileName))        
+            plt.show()
+    
+
+
+
