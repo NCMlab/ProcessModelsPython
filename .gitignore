@@ -3,3 +3,7 @@
 __pycache__/
 
 /venv
+
+AllDataCon0004.nii.gz
+mask.nii.gz
+.DS_Store
