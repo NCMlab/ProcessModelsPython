@@ -3,6 +3,9 @@ import nibabel as nib
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation  
+from sklearn import linear_model
+import pandas as pd
+import time
 #==================================
 # load image (4D) [X,Y,Z_slice,time]
 #nii_img  = nib.load("/Users/arikbarenboim/Documents/ProcessModelsPython/AllDataCon0004.nii.gz")
@@ -22,31 +25,62 @@ def create_brain_data(img_data, mask):
     print(img_data.shape)
     brain_data = []
     for i in range(img_data.shape[3]):
-        print(img_data[:,:,:,i].shape)
+        #print(img_data[:,:,:,i].shape)
         p = np.multiply(img_data[:,:,:,i], mask)
         pf = p.flatten()
-        print(pf)
-        print(pf.shape)
+        #print(pf)
+        #print(pf.shape)
         pfn = pf[np.logical_not(np.isnan(pf))]
-        print(pfn)
+        #print(pfn)
         brain_data.append(pfn)
     return np.array(brain_data)
 
 l = load_img_data("/Users/arikbarenboim/Documents/ProcessModelsPython/AllDataCon0004.nii.gz")
 m = load_img_data("/Users/arikbarenboim/Documents/ProcessModelsPython/mask.nii.gz")
 
+
 c = create_brain_data(l,m)
-np.savetxt("filename",c,newline="\n")
+
+df = pd.read_csv("/Users/arikbarenboim/Documents/ProcessModelsPython/data.csv")
+
+print(df.head())
+
+#Yi=cXi+ei
+
+Y = df.values[:, -1]
+
+x = c[:,2]
+
+print(x)
+n,m = c.shape
+
+start_time = time.time()
+
+lm = linear_model.SGDRegressor()
+for i in range(m):
+    lm.partial_fit(c[:,i].reshape(-1, 1),Y)
+
+print(time.time() - start_time)
+
+print(lm.coef_, lm.intercept_)
+#print(Y)
+
+#X = np.random.choice(c[0], 3081).reshape((39, -1))
+
+#lm = linear_model.LinearRegression().fit(X, Y)
+
+#print(lm.coef_)
+
+#c = create_brain_data(l,m)
+
+
 
 #fig = plt.figure()
-#ax = fig.add_subplot()
+#x = fig.add_subplot()
 
-#ax.imshow(nii_data[:,:,30,3],cmap='gray', interpolation=None)
+#ax.imshow(l[:,:,30,3],cmap='gray', interpolation=None)
 
-#for j in range (nii_data.shape[3]):
-    #for i in range(nii_data[:,:,:,j].shape[2]):
-         #ax.imshow(nii_data[:,:,i,j],cmap='gray', interpolation=None)
-         #plt.pause(0.03)
+#plt.scatter(X,Y)
 
 #plt.show()
 
@@ -54,22 +88,5 @@ np.savetxt("filename",c,newline="\n")
 #ax.imshow(nii_data[:,:,0,0], cmap="gray")
 #ax.axis('off')
 
-
-#===================================================
-# number_of_slices = 3
-# number_of_frames = 4
-
-# fig, ax = plt.subplots(number_of_frames, number_of_slices,constrained_layout=True)
-# fig.canvas.set_window_title('4D Nifti Image')
-# fig.suptitle('4D_Nifti 10 slices 30 time Frames', fontsize=16)
-# #-------------------------------------------------------------------------------
-# mng = plt.get_current_fig_manager()
-# mng.full_screen_toggle()
-
-# for slice in range(number_of_slices):
-#     for frame in range(number_of_frames):
-#         ax[frame, slice].imshow(nii_data[:,:,slice,frame],cmap='gray', interpolation=None)
-#         ax[frame, slice].set_title("layer {} / frame {}".format(slice, frame))
-#         ax[frame, slice].axis('off')
-
-# plt.show()    
+#plt.scatter(x, Y)
+#plt.show()
