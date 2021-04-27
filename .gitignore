@@ -1,9 +1,11 @@
 *.out
 *.sh
 __pycache__/
-
+\.vscode
 /venv
 
 AllDataCon0004.nii.gz
 mask.nii.gz
 .DS_Store
+*.pkl
+*.csv
