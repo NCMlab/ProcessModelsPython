@@ -2,7 +2,7 @@
 #SBATCH --output=%x-%j.log
 #SBATCH --nodes=1
 #SBATCH --time=01:00:00
-#SBATCH --mem-per-cpu=3G
+#SBATCH --mem-per-cpu=1G
 #SBATCH --ntasks-per-node=32
 
 import sys
@@ -10,7 +10,7 @@ import os
 
 sys.path.append(os.getcwd())
 
-import tools as t
+import process_models.tools as t
 import time
 import multiprocessing as mp
 import pandas as pd
@@ -42,6 +42,8 @@ if __name__ == '__main__':
     Y = cog_scores.values[:,-1]
     #age scores
     X = cog_scores.values[:,-2]
+    #combining all of the data
+    combined_data = np.array([[X[i],M[i],Y[i]] for i in range(len(M))],dtype=object)
     #pool object with mp.cpu_count() amount of workers
     pool = mp.Pool(mp.cpu_count())
     #job list 1
@@ -51,14 +53,12 @@ if __name__ == '__main__':
     # iterate n_bootstrap times
     for j in range(N_BOOTSTRAPS):
         #boostrap values X,Y,M
-        bootstrap_value_X = t.boot_sample(X,n,int(time.time()) + j)
-        bootstrap_value_Y = t.boot_sample(Y,n,int(time.time()) + j)
-        bootstrap_value_M = t.boot_sample(M,n,int(time.time()) + j)
+        bootstrap_value = t.boot_sample(combined_data,n,int(time.time()) + j)
         #if its the first iteration take the Point Estimate
         if j == 0:
             formated_M, _xy = t.flatten_data(M, X, Y)
         else:     
-            formated_M, _xy = t.flatten_data(bootstrap_value_M, bootstrap_value_X, bootstrap_value_Y)
+            formated_M, _xy = t.flatten_data(np.array([i.tolist() for i in bootstrap_value[:,1]]), np.array(combined_data[:,0], dtype='float'), np.array(combined_data[:,2], dtype='float'))
 
 
         #First equation jobs

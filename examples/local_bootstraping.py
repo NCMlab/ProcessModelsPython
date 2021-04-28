@@ -22,15 +22,15 @@ if __name__ == '__main__':
 
     n,m = M.shape
 
+    combined_data = np.array([[X[i],M[i],Y[i]] for i in range(len(M))],dtype=object)
+
     pool = mp.Pool(mp.cpu_count())
     jobs1 = []
     jobs2 = []
-    for j in range(1000):
-        bootstap_value_X = t.boot_sample(X,n,int(time.time()) + j)
-        bootstap_value_Y = t.boot_sample(Y,n,int(time.time()) + j)
-        bootstap_value_M = t.boot_sample(M,n,int(time.time()) + j)
+    for j in range(10):
+        bootstrap_value = t.boot_sample(combined_data,n,int(time.time()) + j)
 
-        formated_M, _xy = t.flatten_data(bootstap_value_M, bootstap_value_X, bootstap_value_Y)
+        formated_M, _xy = t.flatten_data(np.array([i.tolist() for i in bootstrap_value[:,1]]), np.array(combined_data[:,0], dtype='float'), np.array(combined_data[:,2], dtype='float'))
 
         job1 = pool.apply_async(t.calculate_beta,args=(_xy[0].reshape(-1,1),formated_M))
 
