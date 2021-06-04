@@ -9,6 +9,9 @@ from dataclasses import dataclass
 import multiprocessing as mp
 #==================================
 
+
+# source ~/.bash_profile
+#  conda install -c conda-forge nibabel
 @dataclass
 class ModelInfo:
     names : dict 
