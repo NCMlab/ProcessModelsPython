@@ -15,8 +15,8 @@ def main():
     WaitTimeBetweenChecks = 60*60 # in seconds
     # Where to find the output files
     # OutDir = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
-    PathToResultFiles = '/home/steffejr/Data'
-    PathToJobFiles = '/home/steffejr/scratch/Project/jobs'
+    PathToResultFiles = '/home/steffejr/Data002'
+    PathToJobFiles = '/home/steffejr/Data002/jobs'
     # WHat is the submission list filename
     fileName = "SubmissionList.csv"
     EmptyQueueFlag = False
