@@ -32,12 +32,11 @@ def MakeBatchScripts():
 
     dfOut = pd.DataFrame(columns=cNames)
 
-    BaseDir = "/home/steffejr/scratch/Project"
-    BaseDir = "/home/steffejr/Data"
-    OutDir = "/home/steffejr/Data/Results"
+    BaseDir = "/home/steffejr/Data002"
+
     #OutDir = '/Users/jasonsteffener/Documents/GitHub'
     CodeDir = "/home/steffejr/scratch/ProcessModelsPython"
-    SubmissionListFileName = os.path.join(OutDir,'SubmissionList.csv')    
+    SubmissionListFileName = os.path.join(BaseDir,'SubmissionList.csv')    
     count = 0
     for i in Params:
         count += 1
@@ -65,7 +64,7 @@ def MakeBatchScripts():
             # Added an array for at least one dimension of simulations
             f.write("#SBATCH --array=1-10\n")
             f.write("source ~/ENV/bin/activate\n")
-            f.write("python %s %d %d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f %s %s\n" %(os.path.join(CodeDir, "ProcessTools.py"), NBoot,NPower,b1,b2,b3,b4,b5,b6,b7,b8, OutDir, '$SLURM_ARRAY_TASK_ID'))
+            f.write("python %s %d %d %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f %0.2f %s %s\n" %(os.path.join(CodeDir, "ProcessTools.py"), NBoot,NPower,b1,b2,b3,b4,b5,b6,b7,b8, os.path.join(BaseDir, 'out'), '$SLURM_ARRAY_TASK_ID'))
             f.close()
             # Add this sim to the dataframe keeping track
             for j in NSamples:
