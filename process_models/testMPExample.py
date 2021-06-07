@@ -21,15 +21,16 @@ def poolcontext(*args, **kwargs):
 
 it2=[]
 N = np.arange(20,200,20)
+N = [100,400]
 sP = [1,0.66,0.33,0,-0.33, -0.66, -1]
 
 
-sP = [0.1, 0.33]
 
 
-TestSimParams = product(N,sP,sP,sP,sP,sP,sP,sP,sP)
 
-#TestSimParams = product(N,sP,[1],[1],[1],[1],[1],[1],[1])
+p = product(sP,sP,sP,sP,sP,sP,sP,sP)
+TestSimParams = [N,sP,sP,sP,sP,sP,sP,sP,sP]
+TestSimParams = product(N,sP,[1],[1],[1],[1],[1],[1],[1])
 temp = TestSimParams
 
 NParams = len(list(temp))

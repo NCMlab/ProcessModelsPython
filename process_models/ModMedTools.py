@@ -5,6 +5,8 @@ Created on Mon May 17 12:18:56 2021
 
 @author: jasonsteffener
 """
+import sys
+import os
 import numpy as np
 from sklearn import linear_model
 from sklearn.utils import resample
@@ -66,11 +68,10 @@ def ResampleData(data, resamples):
     """ resample the data using a list of bootstrap indices """
     return data[resamples,:]
 
-def RunAnalyses(index, N, SimParams):#, NBoot=1000, SimMeans=[1, 1, 1, 1], SimStds=[1, 1, 1, 1], SimParams=[1,1,1,1,1,1,1,1]):
+def RunAnalyses(N, NBoot, ParameterList):#, NBoot=1000, SimMeans=[1, 1, 1, 1], SimStds=[1, 1, 1, 1], SimParams=[1,1,1,1,1,1,1,1]):
     # Sample size        
     # N = 200
-    # Number of bootstraps
-    NBoot = 1000
+
     # Mean values of the variables in the simulated data
     SimMeans = [1, 1, 1, 1]
     # Standard deviatiosnin the simulated data
@@ -78,7 +79,7 @@ def RunAnalyses(index, N, SimParams):#, NBoot=1000, SimMeans=[1, 1, 1, 1], SimSt
     # SimParams = [1,1,1,1,1,1,1,1]
     # Make the simulated data
     # print("Sample Size %d"%(N))
-    data = MakeDataModel59(N,SimMeans,SimStds,SimParams)
+    data = MakeDataModel59(N,SimMeans,SimStds,ParameterList)
     # Make an array of probe values for the moderator
     ModRange = SimMeans[3] + np.array([-3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3])*SimStds[3]
     # Make an array for boostrap resamples
@@ -139,7 +140,7 @@ def RunAnalyses(index, N, SimParams):#, NBoot=1000, SimMeans=[1, 1, 1, 1], SimSt
     AllSign = np.zeros(NB + NC + NM + 2 + 8)
     AllSign[0] = N
     AllSign[1] = NBoot
-    AllSign[2:10] = SimParams
+    AllSign[2:10] = ParameterList
     count = 10
     for i in AllB:
         tempPer, tempBC, bias = CalculateCI(i[1], i[0])
@@ -151,8 +152,6 @@ def RunAnalyses(index, N, SimParams):#, NBoot=1000, SimMeans=[1, 1, 1, 1], SimSt
         count += 1                
 
     return AllSign, columnNames
-
-    
     
 
 def calculate_beta(x,y):
@@ -336,12 +335,12 @@ def TestRun():
     print("Ran %d in %0.6f"%(N,etime))
     print(df.mean())    
 
-def CalculatePower(index, N, SimParams):
-    NPower = 1000    
+def CalculatePower(N, NBoot, NPower, ParameterList):
+    """ Run the analysis many times and calculate how often the results are significant"""
     NewDFflag = True
     start = time.time()
     for i in range(NPower):
-        AllSigns, colNames = RunAnalyses(1,N, [1,1,1,1,1,1,1,1])
+        AllSigns, colNames = RunAnalyses(N, NBoot, ParameterList)
         if NewDFflag:
             df = pd.DataFrame([AllSigns], columns=colNames)
             NewDFflag = False
@@ -351,7 +350,8 @@ def CalculatePower(index, N, SimParams):
     etime = time.time() - start
     print("Ran %d in %0.6f"%(N,etime))
     d = df.mean()
-    d.to_csv('Power_%04d.csv'%(index))
+    return d
+    #d.to_csv('Power_%04d.csv'%(index))
 
 
 def SaveMPresults(data, Nlist, FileFlag):
@@ -377,12 +377,47 @@ def SaveMPresults(data, Nlist, FileFlag):
     # for i in range(N):
     #     print(next(data))
 
-def MakeParams():
-    a = [1,0.66,0.33,0,-0.33, -0.66, -1]
-    p = product(a,a,[19])
-    count = 0 
-    for i in p:
-        print(i)
-        count += 1
-    print(count)
-    
+def main():
+    #   make sure this script and make submussions match
+    if len(sys.argv[1:]) != 12:
+        print("ERROR")
+    else:
+        print("Getting ready")
+        # Pass the process ID to use for setting the seed
+        pid = os.getpid() 
+        # Set the seed
+        np.random.seed(pid + int(time.time()))
+        # Get the arguments
+        NBoot = int(sys.argv[1:][0])
+        NPower = int(sys.argv[1:][1])
+        
+        b1 = float(sys.argv[1:][2])
+        b2 = float(sys.argv[1:][3])
+        b3 = float(sys.argv[1:][4])
+        b4 = float(sys.argv[1:][5])
+        b5 = float(sys.argv[1:][6])
+        b6 = float(sys.argv[1:][7])
+        b7 = float(sys.argv[1:][8])
+        b8 = float(sys.argv[1:][9])
+        
+        OutDir = sys.argv[1:][10]
+        Nindex = int(sys.argv[1:][11])
+
+        print("NBoot: %d"%(NBoot))
+        print("NPower: %d"%(NPower))
+        ParameterList = [b1,b2,b3,b4,b5,b6,b7,b8]
+        # Run the sim
+        NSamples = np.arange(20,201,20)
+        N = NSamples[Nindex]        
+        results = CalculatePower(N, NBoot, NPower, ParameterList)
+        print("Done with the simulations")
+        # Make outputfile name
+        clock = time.localtime()
+        OutFileName = "SimData_NB_%d_NSim_%d_"%(NBoot,NPower)
+        OutFileName = OutFileName+str(clock.tm_hour)+"_"+str(clock.tm_min)+"__"+str(clock.tm_mon)+"_"+str(clock.tm_mday)+"_"+str(clock.tm_year)
+        OutFileName = OutFileName+'_pid'+str(pid)+'.csv'
+        np.savetxt(os.path.join(OutDir, OutFileName), results, delimiter = ',')
+
+
+if __name__ == "__main__":
+    main()
