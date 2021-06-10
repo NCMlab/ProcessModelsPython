@@ -405,10 +405,11 @@ def main():
 
         print("NBoot: %d"%(NBoot))
         print("NPower: %d"%(NPower))
+        print("Nindex: %d"%(Nindex))
         ParameterList = [b1,b2,b3,b4,b5,b6,b7,b8]
         # Run the sim
         NSamples = np.arange(20,201,20)
-        N = NSamples[Nindex]        
+        N = NSamples[Nindex - 1]        
         results = CalculatePower(N, NBoot, NPower, ParameterList)
         print("Done with the simulations")
         # Make outputfile name

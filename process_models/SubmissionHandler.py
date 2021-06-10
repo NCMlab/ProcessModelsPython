@@ -16,7 +16,9 @@ def main():
     # Where to find the output files
     # OutDir = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
     PathToResultFiles = '/home/steffejr/Data002'
+    PathToResultFiles = '/Users/jasonsteffener/Documents/TEMP/out'
     PathToJobFiles = '/home/steffejr/Data002/jobs'
+    PathToJobFiles = '/Users/jasonsteffener/Documents/TEMP'
     # WHat is the submission list filename
     fileName = "SubmissionList.csv"
     EmptyQueueFlag = False
@@ -81,14 +83,20 @@ def CheckSubmissions(PathToResultFiles, fileName):
     
             # Find in the simulation list the values for this result
             # Make flags for the values
-            flagNBoot = df['Nboot'] == int(float(li[0]))
-            flagNSim = df['NSim'] == int(float(li[1]))
-            flagN = df['N'] == int(float(li[2]))
-            flaga = df['a'] == (float(li[3]))
-            flagb = df['b'] == (float(li[4]))
-            flagcP = df['cP'] == (float(li[5]))
-            flagAtype = df['typeA'] == int(float(li[6]))
-            mask = flagNBoot & flagNSim & flagN & flaga & flagb & flagAtype & flagcP
+            flagN = df['N'] == int(float(li[0]))
+            flagNBoot = df['NBoot'] == int(float(li[1]))
+            flagp001 = df['param001'] == round(float(li[2]),2)
+            flagp002 = df['param002'] == round(float(li[3]),2)
+            flagp003 = df['param003'] == round(float(li[4]),2)
+            flagp004 = df['param004'] == round(float(li[5]),2)
+            flagp005 = df['param005'] == round(float(li[6]),2)
+            flagp006 = df['param006'] == round(float(li[7]),2)
+            flagp007 = df['param007'] == round(float(li[8]),2)
+            flagp008 = df['param008'] == round(float(li[9]),2)
+            
+            
+            
+            mask = flagN & flagNBoot & flagp001 & flagp002 & flagp003 & flagp004 & flagp005 & flagp006 & flagp007 & flagp008
             # find the position of this value
             pos = np.flatnonzero(mask)
             # if the simulation results were found update the submission list
