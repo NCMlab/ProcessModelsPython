@@ -45,7 +45,7 @@ def MakeBatchScripts():
     
 
     for i in Params:
-        if (count < 20):
+        if (count > -1):
             # Create parameters as input
             b1 = i[0]
             b2 = i[1]
