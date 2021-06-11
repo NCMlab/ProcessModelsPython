@@ -14,15 +14,16 @@ def MakeBatchScripts():
     # Make all of the submission scripts.
     # Also make a dataframe to keep track of all of the expected simulations
     # What are the values for each parameter that we will use?
-    sP = [0.66,0.33,0,-0.33, -0.66]
-    NSamples = np.arange(20,201,20)
+    sP = [0.66,0.33]
+    NSamples = np.arange(50,201,50)
     NumSampleSizes = NSamples.shape[0]
     NBoot = 1000
     NPower = 1000
     NParams = 8 # How many parameters are there for input to the model?
     Params = product(sP,sP,sP,sP,sP,sP,sP,sP)
-    NSims = (7**8)*NSamples.shape[0]
-
+    NSims = (len(sP)**8)*NSamples.shape[0]
+    print(NSims)
+    
     cNames = ['NBoot','NPower','N']
     for i in range(NParams):
         cNames.append("param%03d"%(i+1))
@@ -44,7 +45,7 @@ def MakeBatchScripts():
     
 
     for i in Params:
-        if (count >= 20) & (count < 40):
+        if (count < 20):
             # Create parameters as input
             b1 = i[0]
             b2 = i[1]

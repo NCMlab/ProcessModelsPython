@@ -16,9 +16,10 @@ def main():
     # Where to find the output files
     # OutDir = '/Users/jasonsteffener/Documents/GitHub/PowerMediationResults'
     PathToResultFiles = '/home/steffejr/Data002'
-    PathToResultFiles = '/Users/jasonsteffener/Documents/TEMP/out'
+    # PathToResultFiles = '/Users/jasonsteffener/Documents/TEMP/out'
     PathToJobFiles = '/home/steffejr/Data002/jobs'
-    PathToJobFiles = '/Users/jasonsteffener/Documents/TEMP'
+    
+    # PathToJobFiles = '/Users/jasonsteffener/Documents/TEMP'
     # WHat is the submission list filename
     fileName = "SubmissionList.csv"
     EmptyQueueFlag = False
@@ -64,7 +65,8 @@ def CheckSubmissions(PathToResultFiles, fileName):
     # Cycle over the list of result files and check to see if they are found    
     count = 0 
     # List all files
-    files = os.listdir(PathToResultFiles)
+    files = os.listdir(os.path.join(PathToResultFiles,'out'))
+    print('Checking %d files'%(len(files)))
     # cycle over all files
     for file in files:
         # Make sure it is the correct type of file
@@ -72,7 +74,7 @@ def CheckSubmissions(PathToResultFiles, fileName):
             # print the name of the file to stdout
             # print(os.path.join(PathToResultFiles, file))
             # OPen the file
-            with open(os.path.join(PathToResultFiles, file), newline='') as f:
+            with open(os.path.join(PathToResultFiles,'out', file), newline='') as f:
                 # Read the file
                 reader = csv.reader(f)
                 data = list(reader)
@@ -101,10 +103,10 @@ def CheckSubmissions(PathToResultFiles, fileName):
             pos = np.flatnonzero(mask)
             # if the simulation results were found update the submission list
             # file to say it was completed
-            df['Completed'][pos] = 1
+            df.loc[pos,'Completed'] = 1
             count += 1
     
-    print("Jobs complted: %d, out of %d total jobs"%(count, len(df.index)))
+    print("Jobs completed: %d, out of %d total jobs"%(count, len(df.index)))
     # update the SUbmissionList file on disk
     df.to_csv(os.path.join(PathToResultFiles, fileName))    
     return count, len(df.index)
