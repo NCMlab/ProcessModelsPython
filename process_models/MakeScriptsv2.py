@@ -37,7 +37,7 @@ def MakeBatchScripts():
     dfOut = pd.DataFrame(columns=cNames)
     
     BaseDir = "/home/steffejr/Data002"
-    BaseDir ="/Users/jasonsteffener/Documents/TEMP"
+    #BaseDir ="/Users/jasonsteffener/Documents/TEMP"
     #OutDir = '/Users/jasonsteffener/Documents/GitHub'
     CodeDir = "/home/steffejr/scratch/ProcessModelsPython/process_models"
     SubmissionListFileName = os.path.join(BaseDir,'SubmissionList.csv')    
