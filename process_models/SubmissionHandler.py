@@ -4,6 +4,9 @@
 Created on Fri Oct 16 10:35:32 2020
 
 @author: jasonsteffener
+
+Notes:
+https://docs.rc.fas.harvard.edu/kb/convenient-slurm-commands/
 """
 import os
 import pandas as pd
